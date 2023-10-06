@@ -5,4 +5,4 @@
  - If switch 1 is pressed just turn on the first led1 only , if switch 2 is pressed just turn on led2 only , if switch 3 is pressed turn on the 2 leds .
  - In case no switches are pressed both leds are off.
 ## Simulation On Proteus:
-![gitHub]()
+![gitHub](https://github.com/MostafaEdrees11/AVR/blob/master/AVR%20Tasks/Assignment%202/Control_Led_Using_Switch/Proteus/Simulation/Control_Led_Using_Switch.gif)

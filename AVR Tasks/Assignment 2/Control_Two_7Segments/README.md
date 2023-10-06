@@ -9,4 +9,4 @@ the first one use to count up , and the second one use to count down , when you 
 
  EX :- 50 becomes 49 and so on ..
 ## Simulation On Proteus:
-![gitHub]()
+![gitHub](https://github.com/MostafaEdrees11/AVR/blob/master/AVR%20Tasks/Assignment%202/Control_Two_7Segments/Proteus/Simulation/Control_Two_7Segment.gif)

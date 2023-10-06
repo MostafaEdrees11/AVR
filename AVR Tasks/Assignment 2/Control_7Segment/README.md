@@ -4,4 +4,4 @@
  - If the switch1 is pressed just increase the number appeared in the 7 segment display, and if the number reach the maximum number (9) do nothing.
  - If the switch2 is pressed just decrease the number appeared in the 7 segment display, and if the number reach the minimum number (0) do nothing.
 ## Simulation On Proteus:
-![gitHub]()
+![gitHub](https://github.com/MostafaEdrees11/AVR/blob/master/AVR%20Tasks/Assignment%202/Control_7Segment/Proteus/Simulation/Control_7Segment.gif)
