@@ -21,7 +21,7 @@ Discarded input sections
  .text.DIO_enuTogPortVal
                 0x00000000       0x44 DIO_prog.o
  .text.DIO_enuSetPinDirection
-                0x00000000       0xdc DIO_prog.o
+                0x00000000       0xe4 DIO_prog.o
  .text.DIO_enuGetPinVal
                 0x00000000       0x8e DIO_prog.o
  .text.DIO_enuTogPinVal
@@ -405,11 +405,11 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xa49
+.debug_info     0x00000000      0xa4e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x4e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega32/avr5/crtatmega32.o
- .debug_info    0x000004e6      0x350 DIO_prog.o
- .debug_info    0x00000836      0x213 main.o
+ .debug_info    0x000004e6      0x355 DIO_prog.o
+ .debug_info    0x0000083b      0x213 main.o
 
 .debug_abbrev   0x00000000      0x6f8
  *(.debug_abbrev)

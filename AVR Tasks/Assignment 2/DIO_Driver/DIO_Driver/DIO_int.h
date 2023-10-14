@@ -11,6 +11,9 @@
 #ifndef DIO_INT_H_
 #define DIO_INT_H_
 
+#include "stdTypes.h"
+#include "Error_States.h"
+
 /* configuration of names of 4 ports */
 #define DIO_u8PORTA		0
 #define DIO_u8PORTB		1

@@ -13,19 +13,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   4 .debug_aranges 00000080  00000000  00000000  00000308  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000a49  00000000  00000000  00000388  2**0
+  5 .debug_info   00000a4e  00000000  00000000  00000388  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 000006f8  00000000  00000000  00000dd1  2**0
+  6 .debug_abbrev 000006f8  00000000  00000000  00000dd6  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000773  00000000  00000000  000014c9  2**0
+  7 .debug_line   00000773  00000000  00000000  000014ce  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000000d8  00000000  00000000  00001c3c  2**2
+  8 .debug_frame  000000d8  00000000  00000000  00001c44  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000047c  00000000  00000000  00001d14  2**0
+  9 .debug_str    0000047c  00000000  00000000  00001d1c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000007c6  00000000  00000000  00002190  2**0
+ 10 .debug_loc    000007c6  00000000  00000000  00002198  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000060  00000000  00000000  00002956  2**0
+ 11 .debug_ranges 00000060  00000000  00000000  0000295e  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -102,7 +102,7 @@ Disassembly of section .text:
   9c:	08 95       	ret
 
 0000009e <DIO_enuSetPinVal>:
-
+**/
 ES_t DIO_enuSetPinVal(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 Copy_u8Value)
 {
 	ES_t Local_enuErrorState = ES_NOK;

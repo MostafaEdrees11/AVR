@@ -11,6 +11,7 @@
 #ifndef ERROR_STATES_H_
 #define ERROR_STATES_H_
 
+/* it is a enum contains the error states that may happen in any function */
 typedef enum
 {
 	ES_OK,

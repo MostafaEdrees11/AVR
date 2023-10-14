@@ -13,6 +13,15 @@
 #include "DIO_priv.h"
 #include "DIO_config.h"
 
+/**
+ ******************************************************************************
+ * @Fn			: DIO_enuINIT
+ * @brief		: it is used to initialize DIO peripheral
+ * @param [in]	: none
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: Atmega32 has 4 ports A, B, C, D and each port consist of 8 pins
+ ******************************************************************************
+**/
 ES_t DIO_enuINIT(void)
 {
 	ES_t Local_enuErrorState = ES_NOK;
@@ -34,6 +43,16 @@ ES_t DIO_enuINIT(void)
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: DIO_enuSetPortDirection
+ * @brief		: it is used to specify the direction of the port
+ * @param [in]	: Copy_u8PortID --> it is specify which port we need to access
+ * @param [in]	: Copy_u8Value --> it is specify the direction of the port input or output
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t DIO_enuSetPortDirection(u8 Copy_u8PortID, u8 Copy_u8Value)
 {
 	ES_t Local_enuErrorState = ES_NOK;
@@ -68,6 +87,16 @@ ES_t DIO_enuSetPortDirection(u8 Copy_u8PortID, u8 Copy_u8Value)
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: DIO_enuSetPortVal
+ * @brief		: it is used to write a value on the port
+ * @param [in]	: Copy_u8PortID --> it is specify which port we need to write on it
+ * @param [in]	: Copy_u8Value --> it is specify the value of the port high or low
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t DIO_enuSetPortVal(u8 Copy_u8PortID, u8 Copy_u8Value)
 {
 	ES_t Local_enuErrorState = ES_NOK;
@@ -102,6 +131,16 @@ ES_t DIO_enuSetPortVal(u8 Copy_u8PortID, u8 Copy_u8Value)
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: DIO_enuGetPortVal
+ * @brief		: it is used to read a value from the port
+ * @param [in]	: Copy_u8PortID --> it is specify which port we need to read its value
+ * @param [in]	: Copy_pu8Value --> it is a pointer to save the value of port in it
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t DIO_enuGetPortVal(u8 Copy_u8PortID, u8 *Copy_pu8Value)
 {
 	ES_t Local_enuErrorState = ES_NOK;
@@ -143,6 +182,15 @@ ES_t DIO_enuGetPortVal(u8 Copy_u8PortID, u8 *Copy_pu8Value)
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: DIO_enuTogPortVal
+ * @brief		: it is used to toggle the value of the port
+ * @param [in]	: Copy_u8PortID --> it is specify which port we need to toggle its value
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t DIO_enuTogPortVal(u8 Copy_u8PortID)
 {
 	ES_t Local_enuErrorState = ES_NOK;
@@ -177,6 +225,17 @@ ES_t DIO_enuTogPortVal(u8 Copy_u8PortID)
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: DIO_enuSetPinDirection
+ * @brief		: it is used to specify the direction of specific pin
+ * @param [in]	: Copy_u8PortID --> it is specify which port we need to access it
+ * @param [in]	: Copy_u8PinID --> it is specify which pin we need to access it
+ * @param [in]	: Copy_u8Value --> it is specify the direction of the pin input or output
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t DIO_enuSetPinDirection(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 Copy_u8Value)
 {
 	ES_t Local_enuErrorState = ES_NOK;
@@ -186,23 +245,23 @@ ES_t DIO_enuSetPinDirection(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 Copy_u8Value)
 		switch(Copy_u8PortID)
 		{
 			case DIO_PORTA:
-			DDRA &= (DIO_MASK_BIT << Copy_u8PinID);
-			DDRA |= (Copy_u8Value << Copy_u8PinID);
+			DDRA &= ~(DIO_MASK_BIT << Copy_u8PinID);
+			DDRA |=  (Copy_u8Value << Copy_u8PinID);
 			break;
 			
 			case DIO_PORTB:
-			DDRB &= (DIO_MASK_BIT << Copy_u8PinID);
-			DDRB |= (Copy_u8Value << Copy_u8PinID);
+			DDRB &= ~(DIO_MASK_BIT << Copy_u8PinID);
+			DDRB |=  (Copy_u8Value << Copy_u8PinID);
 			break;
 			
 			case DIO_PORTC:
-			DDRC &= (DIO_MASK_BIT << Copy_u8PinID);
-			DDRC |= (Copy_u8Value << Copy_u8PinID);
+			DDRC &= ~(DIO_MASK_BIT << Copy_u8PinID);
+			DDRC |=  (Copy_u8Value << Copy_u8PinID);
 			break;
 			
 			case DIO_PORTD:
-			DDRD &= (DIO_MASK_BIT << Copy_u8PinID);
-			DDRD |= (Copy_u8Value << Copy_u8PinID);
+			DDRD &= ~(DIO_MASK_BIT << Copy_u8PinID);
+			DDRD |=  (Copy_u8Value << Copy_u8PinID);
 			break;
 		}
 		Local_enuErrorState = ES_OK;
@@ -215,6 +274,17 @@ ES_t DIO_enuSetPinDirection(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 Copy_u8Value)
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: DIO_enuSetPinVal
+ * @brief		: it is used to write a value on specific pin
+ * @param [in]	: Copy_u8PortID --> it is specify which port we need to access it
+ * @param [in]	: Copy_u8PinID --> it is specify which pin we need to access it
+ * @param [in]	: Copy_u8Value --> it is specify the value of the pin high or low
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t DIO_enuSetPinVal(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 Copy_u8Value)
 {
 	ES_t Local_enuErrorState = ES_NOK;
@@ -253,6 +323,17 @@ ES_t DIO_enuSetPinVal(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 Copy_u8Value)
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: DIO_enuGetPinVal
+ * @brief		: it is used to read a value from specific pin
+ * @param [in]	: Copy_u8PortID --> it is specify which port we need to access it
+ * @param [in]	: Copy_u8PinID --> it is specify which pin we need to access it
+ * @param [in]	: Copy_pu8Value --> it is a pointer where we will save the value of the pin on it
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t DIO_enuGetPinVal(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 *Copy_pu8Value)
 {
 	ES_t Local_enuErrorState = ES_NOK;
@@ -294,6 +375,16 @@ ES_t DIO_enuGetPinVal(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 *Copy_pu8Value)
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: DIO_enuTogPinVal
+ * @brief		: it is used to toggle a value of specific pin
+ * @param [in]	: Copy_u8PortID --> it is specify which port we need to access it
+ * @param [in]	: Copy_u8PinID --> it is specify which pin we need to access it
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t DIO_enuTogPinVal(u8 Copy_u8PortID, u8 Copy_u8PinID)
 {
 	ES_t Local_enuErrorState = ES_NOK;
