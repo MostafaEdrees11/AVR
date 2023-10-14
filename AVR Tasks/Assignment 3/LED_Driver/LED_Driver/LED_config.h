@@ -12,7 +12,7 @@
 #define LED_CONFIG_H_
 
 /* specify the number of leds */
-#define LED_NUM			8
+#define LED_NUM				8
 
 
 /* configuration of led states */

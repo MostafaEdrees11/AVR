@@ -12,7 +12,7 @@
 #define SWITCH_CONFIG_H_
 
 /* specify number of switches */
-#define SW_NUM				3
+#define SW_NUM				2
 
 /* switch definition */
 typedef struct  

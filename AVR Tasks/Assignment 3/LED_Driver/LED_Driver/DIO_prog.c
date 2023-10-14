@@ -186,23 +186,23 @@ ES_t DIO_enuSetPinDirection(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 Copy_u8Value)
 		switch(Copy_u8PortID)
 		{
 			case DIO_PORTA:
-			DDRA &= (DIO_MASK_BIT << Copy_u8PinID);
-			DDRA |= (Copy_u8Value << Copy_u8PinID);
+			DDRA &= ~(DIO_MASK_BIT << Copy_u8PinID);
+			DDRA |=  (Copy_u8Value << Copy_u8PinID);
 			break;
 			
 			case DIO_PORTB:
-			DDRB &= (DIO_MASK_BIT << Copy_u8PinID);
+			DDRB &= ~(DIO_MASK_BIT << Copy_u8PinID);
 			DDRB |= (Copy_u8Value << Copy_u8PinID);
 			break;
 			
 			case DIO_PORTC:
-			DDRC &= (DIO_MASK_BIT << Copy_u8PinID);
-			DDRC |= (Copy_u8Value << Copy_u8PinID);
+			DDRC &= ~(DIO_MASK_BIT << Copy_u8PinID);
+			DDRC |=  (Copy_u8Value << Copy_u8PinID);
 			break;
 			
 			case DIO_PORTD:
-			DDRD &= (DIO_MASK_BIT << Copy_u8PinID);
-			DDRD |= (Copy_u8Value << Copy_u8PinID);
+			DDRD &= ~(DIO_MASK_BIT << Copy_u8PinID);
+			DDRD |=  (Copy_u8Value << Copy_u8PinID);
 			break;
 		}
 		Local_enuErrorState = ES_OK;
