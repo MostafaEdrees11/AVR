@@ -35,10 +35,6 @@ Discarded input sections
  .text          0x00000000        0x0 Seven_Segment_prog.o
  .data          0x00000000        0x0 Seven_Segment_prog.o
  .bss           0x00000000        0x0 Seven_Segment_prog.o
- .text.Seven_Segment_enuEnableCommon
-                0x00000000       0x60 Seven_Segment_prog.o
- .text.Seven_Segment_enuDisableCommon
-                0x00000000       0x60 Seven_Segment_prog.o
  .text.Seven_Segment_enuEnableDot
                 0x00000000       0x60 Seven_Segment_prog.o
  .text.Seven_Segment_enuDisableDot
@@ -206,7 +202,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x7e2
+.text           0x00000000      0x8a2
  *(.vectors)
  .vectors       0x00000000       0x54 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega32/avr5/crtatmega32.o
                 0x00000000                __vector_default
@@ -300,11 +296,17 @@ END GROUP
  .text.Seven_Segment_enuDisplayNumber
                 0x000004b0      0x32e Seven_Segment_prog.o
                 0x000004b0                Seven_Segment_enuDisplayNumber
-                0x000007de                . = ALIGN (0x2)
+ .text.Seven_Segment_enuEnableCommon
+                0x000007de       0x60 Seven_Segment_prog.o
+                0x000007de                Seven_Segment_enuEnableCommon
+ .text.Seven_Segment_enuDisableCommon
+                0x0000083e       0x60 Seven_Segment_prog.o
+                0x0000083e                Seven_Segment_enuDisableCommon
+                0x0000089e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000007de        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x000007de                _exit
-                0x000007de                exit
+ .fini9         0x0000089e        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x0000089e                _exit
+                0x0000089e                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -323,11 +325,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000007de        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x0000089e        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000007e2                _etext = .
+                0x000008a2                _etext = .
 
-.data           0x00800060       0x30 load address 0x000007e2
+.data           0x00800060       0x30 load address 0x000008a2
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -350,8 +352,8 @@ END GROUP
  *(.bss*)
  *(COMMON)
                 [!provide]                PROVIDE (__bss_end, .)
-                0x000007e2                __data_load_start = LOADADDR (.data)
-                0x00000812                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000008a2                __data_load_start = LOADADDR (.data)
+                0x000008d2                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800090        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -439,29 +441,29 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x159f
+.debug_info     0x00000000     0x15f6
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x4e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_info    0x000004e6      0x355 DIO_prog.o
- .debug_info    0x0000083b      0x342 main.o
- .debug_info    0x00000b7d      0x1d4 Seven_Segment_config.o
- .debug_info    0x00000d51      0x84e Seven_Segment_prog.o
+ .debug_info    0x0000083b      0x399 main.o
+ .debug_info    0x00000bd4      0x1d4 Seven_Segment_config.o
+ .debug_info    0x00000da8      0x84e Seven_Segment_prog.o
 
-.debug_abbrev   0x00000000      0x911
+.debug_abbrev   0x00000000      0x909
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x4a3 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_abbrev  0x000004a3      0x108 DIO_prog.o
- .debug_abbrev  0x000005ab      0x197 main.o
- .debug_abbrev  0x00000742       0x83 Seven_Segment_config.o
- .debug_abbrev  0x000007c5      0x14c Seven_Segment_prog.o
+ .debug_abbrev  0x000005ab      0x18f main.o
+ .debug_abbrev  0x0000073a       0x83 Seven_Segment_config.o
+ .debug_abbrev  0x000007bd      0x14c Seven_Segment_prog.o
 
-.debug_line     0x00000000      0xc30
+.debug_line     0x00000000      0xc12
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x116 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_line    0x00000116      0x4d0 DIO_prog.o
- .debug_line    0x000005e6      0x1b5 main.o
- .debug_line    0x0000079b       0x79 Seven_Segment_config.o
- .debug_line    0x00000814      0x41c Seven_Segment_prog.o
+ .debug_line    0x000005e6      0x197 main.o
+ .debug_line    0x0000077d       0x79 Seven_Segment_config.o
+ .debug_line    0x000007f6      0x41c Seven_Segment_prog.o
 
 .debug_frame    0x00000000      0x244
  *(.debug_frame)
@@ -474,18 +476,18 @@ END GROUP
  .debug_str     0x00000000      0x196 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_str     0x00000196      0x27e DIO_prog.o
                                 0x2ac (size before relaxing)
- .debug_str     0x00000414      0x19a main.o
-                                0x355 (size before relaxing)
- .debug_str     0x000005ae       0x2b Seven_Segment_config.o
+ .debug_str     0x00000414      0x1d7 main.o
+                                0x392 (size before relaxing)
+ .debug_str     0x000005eb       0x2b Seven_Segment_config.o
                                 0x28c (size before relaxing)
- .debug_str     0x000005d9      0x111 Seven_Segment_prog.o
+ .debug_str     0x00000616       0xd4 Seven_Segment_prog.o
                                 0x424 (size before relaxing)
 
-.debug_loc      0x00000000     0x1494
+.debug_loc      0x00000000     0x1455
  *(.debug_loc)
  .debug_loc     0x00000000      0x6d0 DIO_prog.o
- .debug_loc     0x000006d0       0x85 main.o
- .debug_loc     0x00000755      0xd3f Seven_Segment_prog.o
+ .debug_loc     0x000006d0       0x46 main.o
+ .debug_loc     0x00000716      0xd3f Seven_Segment_prog.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -505,11 +507,11 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0xb8
+.debug_ranges   0x00000000       0xa0
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x50 DIO_prog.o
- .debug_ranges  0x00000050       0x28 main.o
- .debug_ranges  0x00000078       0x40 Seven_Segment_prog.o
+ .debug_ranges  0x00000050       0x10 main.o
+ .debug_ranges  0x00000060       0x40 Seven_Segment_prog.o
 
 .debug_macro
  *(.debug_macro)

@@ -3,29 +3,29 @@ Seven_Segment_Linking_Time.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000007e2  00000000  00000000  00000074  2**1
+  0 .text         000008a2  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000030  00800060  000007e2  00000856  2**0
+  1 .data         00000030  00800060  000008a2  00000916  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .comment      00000030  00000000  00000000  00000886  2**0
+  2 .comment      00000030  00000000  00000000  00000946  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000008b8  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000978  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 000000e8  00000000  00000000  000008f4  2**0
+  4 .debug_aranges 000000e8  00000000  00000000  000009b4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   0000159f  00000000  00000000  000009dc  2**0
+  5 .debug_info   000015f6  00000000  00000000  00000a9c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000911  00000000  00000000  00001f7b  2**0
+  6 .debug_abbrev 00000909  00000000  00000000  00002092  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000c30  00000000  00000000  0000288c  2**0
+  7 .debug_line   00000c12  00000000  00000000  0000299b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000244  00000000  00000000  000034bc  2**2
+  8 .debug_frame  00000244  00000000  00000000  000035b0  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000006ea  00000000  00000000  00003700  2**0
+  9 .debug_str    000006ea  00000000  00000000  000037f4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00001494  00000000  00000000  00003dea  2**0
+ 10 .debug_loc    00001455  00000000  00000000  00003ede  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 000000b8  00000000  00000000  0000527e  2**0
+ 11 .debug_ranges 000000a0  00000000  00000000  00005333  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -65,8 +65,8 @@ Disassembly of section .text:
   60:	10 e0       	ldi	r17, 0x00	; 0
   62:	a0 e6       	ldi	r26, 0x60	; 96
   64:	b0 e0       	ldi	r27, 0x00	; 0
-  66:	e2 ee       	ldi	r30, 0xE2	; 226
-  68:	f7 e0       	ldi	r31, 0x07	; 7
+  66:	e2 ea       	ldi	r30, 0xA2	; 162
+  68:	f8 e0       	ldi	r31, 0x08	; 8
   6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
   6c:	05 90       	lpm	r0, Z+
   6e:	0d 92       	st	X+, r0
@@ -74,7 +74,7 @@ Disassembly of section .text:
   72:	b1 07       	cpc	r27, r17
   74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
   76:	0e 94 25 01 	call	0x24a	; 0x24a <main>
-  7a:	0c 94 ef 03 	jmp	0x7de	; 0x7de <_exit>
+  7a:	0c 94 4f 04 	jmp	0x89e	; 0x89e <_exit>
 
 0000007e <__bad_interrupt>:
   7e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -486,8 +486,8 @@ ES_t DIO_enuSetPinVal(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 Copy_u8Value)
  248:	08 95       	ret
 
 0000024a <main>:
-extern SEG_t SEV_SEG_AstrSEGConfig[SEG_NUM];
 
+//POV to display 25
 int main(void)
 {
 	ES_t error;
@@ -495,69 +495,54 @@ int main(void)
  24a:	80 e6       	ldi	r24, 0x60	; 96
  24c:	90 e0       	ldi	r25, 0x00	; 0
  24e:	0e 94 4d 01 	call	0x29a	; 0x29a <Seven_Segment_enuInit>
- 252:	18 2f       	mov	r17, r24
+ 252:	c8 2f       	mov	r28, r24
 	
-    /* Replace with your application code */
-    while (1) 
-    {
+	/* Replace with your application code */
+	while (1)
+	{
 		if(error == ES_OK)
- 254:	11 11       	cpse	r17, r1
+ 254:	c1 11       	cpse	r28, r1
  256:	fe cf       	rjmp	.-4      	; 0x254 <main+0xa>
- 258:	1c c0       	rjmp	.+56     	; 0x292 <main+0x48>
 		{
-			for(u8 i = 0; i < 10; i++)
-			{
-				Seven_Segment_enuDisplayNumber(0,i);
- 25a:	6d 2f       	mov	r22, r29
- 25c:	80 e0       	ldi	r24, 0x00	; 0
- 25e:	0e 94 58 02 	call	0x4b0	; 0x4b0 <Seven_Segment_enuDisplayNumber>
-				Seven_Segment_enuDisplayNumber(1,0);
- 262:	60 e0       	ldi	r22, 0x00	; 0
- 264:	81 e0       	ldi	r24, 0x01	; 1
- 266:	0e 94 58 02 	call	0x4b0	; 0x4b0 <Seven_Segment_enuDisplayNumber>
-				for(u8 j = 0; j < 10; j++)
- 26a:	c0 e0       	ldi	r28, 0x00	; 0
- 26c:	0e c0       	rjmp	.+28     	; 0x28a <main+0x40>
-				{
-					Seven_Segment_enuDisplayNumber(1,j);
- 26e:	6c 2f       	mov	r22, r28
- 270:	81 e0       	ldi	r24, 0x01	; 1
- 272:	0e 94 58 02 	call	0x4b0	; 0x4b0 <Seven_Segment_enuDisplayNumber>
+			Seven_Segment_enuDisableCommon(1);
+ 258:	81 e0       	ldi	r24, 0x01	; 1
+ 25a:	0e 94 1f 04 	call	0x83e	; 0x83e <Seven_Segment_enuDisableCommon>
+			Seven_Segment_enuDisplayNumber(0,5);
+ 25e:	65 e0       	ldi	r22, 0x05	; 5
+ 260:	80 e0       	ldi	r24, 0x00	; 0
+ 262:	0e 94 58 02 	call	0x4b0	; 0x4b0 <Seven_Segment_enuDisplayNumber>
+			Seven_Segment_enuEnableCommon(0);
+ 266:	80 e0       	ldi	r24, 0x00	; 0
+ 268:	0e 94 ef 03 	call	0x7de	; 0x7de <Seven_Segment_enuEnableCommon>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 276:	2f e5       	ldi	r18, 0x5F	; 95
- 278:	8a ee       	ldi	r24, 0xEA	; 234
- 27a:	90 e0       	ldi	r25, 0x00	; 0
- 27c:	21 50       	subi	r18, 0x01	; 1
- 27e:	80 40       	sbci	r24, 0x00	; 0
- 280:	90 40       	sbci	r25, 0x00	; 0
- 282:	e1 f7       	brne	.-8      	; 0x27c <main+0x32>
- 284:	00 c0       	rjmp	.+0      	; 0x286 <main+0x3c>
- 286:	00 00       	nop
-		{
-			for(u8 i = 0; i < 10; i++)
-			{
-				Seven_Segment_enuDisplayNumber(0,i);
-				Seven_Segment_enuDisplayNumber(1,0);
-				for(u8 j = 0; j < 10; j++)
- 288:	cf 5f       	subi	r28, 0xFF	; 255
- 28a:	ca 30       	cpi	r28, 0x0A	; 10
- 28c:	80 f3       	brcs	.-32     	; 0x26e <main+0x24>
-    /* Replace with your application code */
-    while (1) 
-    {
-		if(error == ES_OK)
-		{
-			for(u8 i = 0; i < 10; i++)
- 28e:	df 5f       	subi	r29, 0xFF	; 255
- 290:	01 c0       	rjmp	.+2      	; 0x294 <main+0x4a>
- 292:	d0 e0       	ldi	r29, 0x00	; 0
- 294:	da 30       	cpi	r29, 0x0A	; 10
- 296:	08 f3       	brcs	.-62     	; 0x25a <main+0x10>
+ 26c:	83 ec       	ldi	r24, 0xC3	; 195
+ 26e:	99 e0       	ldi	r25, 0x09	; 9
+ 270:	01 97       	sbiw	r24, 0x01	; 1
+ 272:	f1 f7       	brne	.-4      	; 0x270 <main+0x26>
+ 274:	00 c0       	rjmp	.+0      	; 0x276 <main+0x2c>
+ 276:	00 00       	nop
+			_delay_ms(10);
+			Seven_Segment_enuDisableCommon(0);
+ 278:	80 e0       	ldi	r24, 0x00	; 0
+ 27a:	0e 94 1f 04 	call	0x83e	; 0x83e <Seven_Segment_enuDisableCommon>
+			Seven_Segment_enuDisplayNumber(1,2);
+ 27e:	62 e0       	ldi	r22, 0x02	; 2
+ 280:	81 e0       	ldi	r24, 0x01	; 1
+ 282:	0e 94 58 02 	call	0x4b0	; 0x4b0 <Seven_Segment_enuDisplayNumber>
+			Seven_Segment_enuEnableCommon(1);
+ 286:	81 e0       	ldi	r24, 0x01	; 1
+ 288:	0e 94 ef 03 	call	0x7de	; 0x7de <Seven_Segment_enuEnableCommon>
+ 28c:	85 ea       	ldi	r24, 0xA5	; 165
+ 28e:	9e e0       	ldi	r25, 0x0E	; 14
+ 290:	01 97       	sbiw	r24, 0x01	; 1
+ 292:	f1 f7       	brne	.-4      	; 0x290 <main+0x46>
+ 294:	00 c0       	rjmp	.+0      	; 0x296 <main+0x4c>
+ 296:	00 00       	nop
  298:	dd cf       	rjmp	.-70     	; 0x254 <main+0xa>
 
 0000029a <Seven_Segment_enuInit>:
@@ -1382,8 +1367,166 @@ ES_t Seven_Segment_enuDisplayNumber(u8 Copy_SEG_ID, u8 Copy_u8Number)
  7da:	4f 90       	pop	r4
  7dc:	08 95       	ret
 
-000007de <_exit>:
- 7de:	f8 94       	cli
+000007de <Seven_Segment_enuEnableCommon>:
 
-000007e0 <__stop_program>:
- 7e0:	ff cf       	rjmp	.-2      	; 0x7e0 <__stop_program>
+ES_t Seven_Segment_enuEnableCommon(u8 Copy_SEG_ID)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+	
+	if(Copy_SEG_ID < SEG_NUM)
+ 7de:	82 30       	cpi	r24, 0x02	; 2
+ 7e0:	50 f5       	brcc	.+84     	; 0x836 <__DATA_REGION_LENGTH__+0x36>
+	{
+		if(SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_TYPE == COMMON_ANODE)
+ 7e2:	90 e0       	ldi	r25, 0x00	; 0
+ 7e4:	23 e1       	ldi	r18, 0x13	; 19
+ 7e6:	28 9f       	mul	r18, r24
+ 7e8:	f0 01       	movw	r30, r0
+ 7ea:	29 9f       	mul	r18, r25
+ 7ec:	f0 0d       	add	r31, r0
+ 7ee:	11 24       	eor	r1, r1
+ 7f0:	e0 5a       	subi	r30, 0xA0	; 160
+ 7f2:	ff 4f       	sbci	r31, 0xFF	; 255
+ 7f4:	22 89       	ldd	r18, Z+18	; 0x12
+ 7f6:	25 30       	cpi	r18, 0x05	; 5
+ 7f8:	71 f4       	brne	.+28     	; 0x816 <__DATA_REGION_LENGTH__+0x16>
+		{
+			Local_enuErrorState = DIO_enuSetPinVal(SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_CMN_PORT, SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_CMN_PIN, DIO_u8HIGH);
+ 7fa:	23 e1       	ldi	r18, 0x13	; 19
+ 7fc:	28 9f       	mul	r18, r24
+ 7fe:	f0 01       	movw	r30, r0
+ 800:	29 9f       	mul	r18, r25
+ 802:	f0 0d       	add	r31, r0
+ 804:	11 24       	eor	r1, r1
+ 806:	e0 5a       	subi	r30, 0xA0	; 160
+ 808:	ff 4f       	sbci	r31, 0xFF	; 255
+ 80a:	67 85       	ldd	r22, Z+15	; 0x0f
+ 80c:	41 e0       	ldi	r20, 0x01	; 1
+ 80e:	86 85       	ldd	r24, Z+14	; 0x0e
+ 810:	0e 94 b3 00 	call	0x166	; 0x166 <DIO_enuSetPinVal>
+ 814:	08 95       	ret
+		}
+		else if(SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_TYPE == COMMON_CATHODE)
+ 816:	26 30       	cpi	r18, 0x06	; 6
+ 818:	81 f4       	brne	.+32     	; 0x83a <__DATA_REGION_LENGTH__+0x3a>
+		{
+			Local_enuErrorState = DIO_enuSetPinVal(SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_CMN_PORT, SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_CMN_PIN, DIO_u8LOW);
+ 81a:	23 e1       	ldi	r18, 0x13	; 19
+ 81c:	28 9f       	mul	r18, r24
+ 81e:	f0 01       	movw	r30, r0
+ 820:	29 9f       	mul	r18, r25
+ 822:	f0 0d       	add	r31, r0
+ 824:	11 24       	eor	r1, r1
+ 826:	e0 5a       	subi	r30, 0xA0	; 160
+ 828:	ff 4f       	sbci	r31, 0xFF	; 255
+ 82a:	67 85       	ldd	r22, Z+15	; 0x0f
+ 82c:	40 e0       	ldi	r20, 0x00	; 0
+ 82e:	86 85       	ldd	r24, Z+14	; 0x0e
+ 830:	0e 94 b3 00 	call	0x166	; 0x166 <DIO_enuSetPinVal>
+ 834:	08 95       	ret
+		}
+	}
+	else
+	{
+		Local_enuErrorState = ES_OUT_OF_RANGE;
+ 836:	83 e0       	ldi	r24, 0x03	; 3
+ 838:	08 95       	ret
+	return Local_enuErrorState;
+}
+
+ES_t Seven_Segment_enuEnableCommon(u8 Copy_SEG_ID)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+ 83a:	81 e0       	ldi	r24, 0x01	; 1
+	{
+		Local_enuErrorState = ES_OUT_OF_RANGE;
+	}
+	
+	return Local_enuErrorState;
+}
+ 83c:	08 95       	ret
+
+0000083e <Seven_Segment_enuDisableCommon>:
+
+ES_t Seven_Segment_enuDisableCommon(u8 Copy_SEG_ID)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+	
+	if(Copy_SEG_ID < SEG_NUM)
+ 83e:	82 30       	cpi	r24, 0x02	; 2
+ 840:	50 f5       	brcc	.+84     	; 0x896 <__stack+0x37>
+	{
+		if(SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_TYPE == COMMON_ANODE)
+ 842:	90 e0       	ldi	r25, 0x00	; 0
+ 844:	23 e1       	ldi	r18, 0x13	; 19
+ 846:	28 9f       	mul	r18, r24
+ 848:	f0 01       	movw	r30, r0
+ 84a:	29 9f       	mul	r18, r25
+ 84c:	f0 0d       	add	r31, r0
+ 84e:	11 24       	eor	r1, r1
+ 850:	e0 5a       	subi	r30, 0xA0	; 160
+ 852:	ff 4f       	sbci	r31, 0xFF	; 255
+ 854:	22 89       	ldd	r18, Z+18	; 0x12
+ 856:	25 30       	cpi	r18, 0x05	; 5
+ 858:	71 f4       	brne	.+28     	; 0x876 <__stack+0x17>
+		{
+			Local_enuErrorState = DIO_enuSetPinVal(SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_CMN_PORT, SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_CMN_PIN, DIO_u8LOW);
+ 85a:	23 e1       	ldi	r18, 0x13	; 19
+ 85c:	28 9f       	mul	r18, r24
+ 85e:	f0 01       	movw	r30, r0
+ 860:	29 9f       	mul	r18, r25
+ 862:	f0 0d       	add	r31, r0
+ 864:	11 24       	eor	r1, r1
+ 866:	e0 5a       	subi	r30, 0xA0	; 160
+ 868:	ff 4f       	sbci	r31, 0xFF	; 255
+ 86a:	67 85       	ldd	r22, Z+15	; 0x0f
+ 86c:	40 e0       	ldi	r20, 0x00	; 0
+ 86e:	86 85       	ldd	r24, Z+14	; 0x0e
+ 870:	0e 94 b3 00 	call	0x166	; 0x166 <DIO_enuSetPinVal>
+ 874:	08 95       	ret
+		}
+		else if(SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_TYPE == COMMON_CATHODE)
+ 876:	26 30       	cpi	r18, 0x06	; 6
+ 878:	81 f4       	brne	.+32     	; 0x89a <__stack+0x3b>
+		{
+			Local_enuErrorState = DIO_enuSetPinVal(SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_CMN_PORT, SEV_SEG_AstrSEGConfig[Copy_SEG_ID].SEG_CMN_PIN, DIO_u8HIGH);
+ 87a:	23 e1       	ldi	r18, 0x13	; 19
+ 87c:	28 9f       	mul	r18, r24
+ 87e:	f0 01       	movw	r30, r0
+ 880:	29 9f       	mul	r18, r25
+ 882:	f0 0d       	add	r31, r0
+ 884:	11 24       	eor	r1, r1
+ 886:	e0 5a       	subi	r30, 0xA0	; 160
+ 888:	ff 4f       	sbci	r31, 0xFF	; 255
+ 88a:	67 85       	ldd	r22, Z+15	; 0x0f
+ 88c:	41 e0       	ldi	r20, 0x01	; 1
+ 88e:	86 85       	ldd	r24, Z+14	; 0x0e
+ 890:	0e 94 b3 00 	call	0x166	; 0x166 <DIO_enuSetPinVal>
+ 894:	08 95       	ret
+		}
+	}
+	else
+	{
+		Local_enuErrorState = ES_OUT_OF_RANGE;
+ 896:	83 e0       	ldi	r24, 0x03	; 3
+ 898:	08 95       	ret
+	return Local_enuErrorState;
+}
+
+ES_t Seven_Segment_enuDisableCommon(u8 Copy_SEG_ID)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+ 89a:	81 e0       	ldi	r24, 0x01	; 1
+	{
+		Local_enuErrorState = ES_OUT_OF_RANGE;
+	}
+	
+	return Local_enuErrorState;
+}
+ 89c:	08 95       	ret
+
+0000089e <_exit>:
+ 89e:	f8 94       	cli
+
+000008a0 <__stop_program>:
+ 8a0:	ff cf       	rjmp	.-2      	; 0x8a0 <__stop_program>
