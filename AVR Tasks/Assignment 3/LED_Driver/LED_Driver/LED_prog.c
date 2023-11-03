@@ -18,7 +18,7 @@
 
 ES_t LED_enuINIT(LED_t *Copy_pAstrLedConfig)
 {
-	ES_t Local_u8ErrorState = ES_NOK;
+	ES_t Local_enuErrorState = ES_NOK;
 	
 	if(Copy_pAstrLedConfig != NULL)
 	{
@@ -30,98 +30,98 @@ ES_t LED_enuINIT(LED_t *Copy_pAstrLedConfig)
 			{
 				if(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8InitState == LED_u8ON)
 				{
-					Local_u8ErrorState = DIO_enuSetPinVal(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PortID, Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PinID, DIO_u8LOW);
+					Local_enuErrorState = DIO_enuSetPinVal(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PortID, Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PinID, DIO_u8LOW);
 				}
 				else if(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8InitState == LED_u8OFF)
 				{
-					Local_u8ErrorState = DIO_enuSetPinVal(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PortID, Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PinID, DIO_u8HIGH);
+					Local_enuErrorState = DIO_enuSetPinVal(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PortID, Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PinID, DIO_u8HIGH);
 				}
 				else
 				{
-					Local_u8ErrorState = ES_OUT_OF_RANGE;
+					Local_enuErrorState = ES_OUT_OF_RANGE;
 				}
 			}
 			else if(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8Connection == LED_u8SOURCE)
 			{
 				if(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8InitState == LED_u8ON)
 				{
-					Local_u8ErrorState = DIO_enuSetPinVal(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PortID, Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PinID, DIO_u8HIGH);
+					Local_enuErrorState = DIO_enuSetPinVal(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PortID, Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PinID, DIO_u8HIGH);
 				}
 				else if(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8InitState == LED_u8OFF)
 				{
-					Local_u8ErrorState = DIO_enuSetPinVal(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PortID, Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PinID, DIO_u8LOW);
+					Local_enuErrorState = DIO_enuSetPinVal(Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PortID, Copy_pAstrLedConfig[Local_u8Iterator].LED_u8PinID, DIO_u8LOW);
 				}
 				else
 				{
-					Local_u8ErrorState = ES_OUT_OF_RANGE;
+					Local_enuErrorState = ES_OUT_OF_RANGE;
 				}
 			}
 			else
 			{
-				Local_u8ErrorState = ES_OUT_OF_RANGE;
+				Local_enuErrorState = ES_OUT_OF_RANGE;
 			}
 		}
 	}
 	else
 	{
-		Local_u8ErrorState = ES_NULL_POINTER;
+		Local_enuErrorState = ES_NULL_POINTER;
 	}
 	
-	return Local_u8ErrorState;
+	return Local_enuErrorState;
 }
 
 ES_t LED_enuTurnON(LED_t *Copy_pstrLedID)
 {
-	ES_t Local_u8ErrorState = ES_NOK;
+	ES_t Local_enuErrorState = ES_NOK;
 	
 	if(Copy_pstrLedID != NULL)
 	{
 		DIO_enuSetPinDirection(Copy_pstrLedID->LED_u8PortID, Copy_pstrLedID->LED_u8PinID, DIO_u8OUTPUT);
 		if(Copy_pstrLedID->LED_u8Connection == LED_u8SINK)
 		{
-			Local_u8ErrorState = DIO_enuSetPinVal(Copy_pstrLedID->LED_u8PortID, Copy_pstrLedID->LED_u8PinID, DIO_u8LOW);
+			Local_enuErrorState = DIO_enuSetPinVal(Copy_pstrLedID->LED_u8PortID, Copy_pstrLedID->LED_u8PinID, DIO_u8LOW);
 		}
 		else if(Copy_pstrLedID->LED_u8Connection == LED_u8SOURCE)
 		{
-			Local_u8ErrorState = DIO_enuSetPinVal(Copy_pstrLedID->LED_u8PortID, Copy_pstrLedID->LED_u8PinID, DIO_u8HIGH);
+			Local_enuErrorState = DIO_enuSetPinVal(Copy_pstrLedID->LED_u8PortID, Copy_pstrLedID->LED_u8PinID, DIO_u8HIGH);
 		}
 		else
 		{
-			Local_u8ErrorState = ES_OUT_OF_RANGE;
+			Local_enuErrorState = ES_OUT_OF_RANGE;
 		}
 	}
 	else
 	{
-		Local_u8ErrorState = ES_NULL_POINTER;
+		Local_enuErrorState = ES_NULL_POINTER;
 	}
 	
-	return Local_u8ErrorState;
+	return Local_enuErrorState;
 }
 
 ES_t LED_enuTurnOFF(LED_t *Copy_pstrLedID)
 {
-	ES_t Local_u8ErrorState = ES_NOK;
+	ES_t Local_enuErrorState = ES_NOK;
 	
 	if(Copy_pstrLedID != NULL)
 	{
 		DIO_enuSetPinDirection(Copy_pstrLedID->LED_u8PortID, Copy_pstrLedID->LED_u8PinID, DIO_u8OUTPUT);
 		if(Copy_pstrLedID->LED_u8Connection == LED_u8SINK)
 		{
-			Local_u8ErrorState = DIO_enuSetPinVal(Copy_pstrLedID->LED_u8PortID, Copy_pstrLedID->LED_u8PinID, DIO_u8HIGH);
+			Local_enuErrorState = DIO_enuSetPinVal(Copy_pstrLedID->LED_u8PortID, Copy_pstrLedID->LED_u8PinID, DIO_u8HIGH);
 		}
 		else if(Copy_pstrLedID->LED_u8Connection == LED_u8SOURCE)
 		{
-			Local_u8ErrorState = DIO_enuSetPinVal(Copy_pstrLedID->LED_u8PortID, Copy_pstrLedID->LED_u8PinID, DIO_u8LOW);
+			Local_enuErrorState = DIO_enuSetPinVal(Copy_pstrLedID->LED_u8PortID, Copy_pstrLedID->LED_u8PinID, DIO_u8LOW);
 		}
 		else
 		{
-			Local_u8ErrorState = ES_OUT_OF_RANGE;
+			Local_enuErrorState = ES_OUT_OF_RANGE;
 		}
 	}
 	else
 	{
-		Local_u8ErrorState = ES_NULL_POINTER;
+		Local_enuErrorState = ES_NULL_POINTER;
 	}
 	
-	return Local_u8ErrorState;
+	return Local_enuErrorState;
 }
