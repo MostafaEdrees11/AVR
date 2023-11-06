@@ -21,6 +21,8 @@ ES_t LCD_enuGoToPosition(u8 Copy_u8Line, u8 Copy_u8Position);
 
 ES_t LCD_enuWriteString(u8 *Copy_pu8Str);
 
+ES_t LCD_enuWriteNumber(s32 Copy_s32Number);
+
 void LCD_vidClearScreen(void);
 
 

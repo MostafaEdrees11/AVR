@@ -16,39 +16,81 @@
 #include "LCD_priv.h"
 #include "LCD_config.h"
 
-//#include <util/delay.h>
+#include <util/delay.h>
 
 static u8 LCD_u8PosCounter = 0;
 
+/**
+ ******************************************************************************
+ * @Fn			: LCD_enuInit
+ * @brief		: it is used to initialize LCD peripheral
+ * @param [in]	: none
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t LCD_enuInit(void)
 {
 	ES_t Local_enuErrorState = ES_NOK;
 	
 	/* Set Control Pins as output */
 	Local_enuErrorState = DIO_enuSetPinDirection(RS_PORT, RS_PIN, DIO_u8OUTPUT);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+	
 	Local_enuErrorState = DIO_enuSetPinDirection(RW_PORT, RW_PIN, DIO_u8OUTPUT);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinDirection(EN_PORT, EN_PIN, DIO_u8OUTPUT);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	
 	/* Set Data Pins as output */
 	Local_enuErrorState = DIO_enuSetPinDirection(D7_PORT, D7_PIN, DIO_u8OUTPUT);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinDirection(D6_PORT, D6_PIN, DIO_u8OUTPUT);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinDirection(D5_PORT, D5_PIN, DIO_u8OUTPUT);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	Local_enuErrorState = DIO_enuSetPinDirection(D4_PORT, D4_PIN, DIO_u8OUTPUT);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	
 	_delay_ms(35);
 	
 	#if LCD_MODE == EIGHT_BIT
 	Local_enuErrorState = DIO_enuSetPinDirection(D3_PORT, D3_PIN, DIO_u8OUTPUT);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+	
 	Local_enuErrorState = DIO_enuSetPinDirection(D2_PORT, D2_PIN, DIO_u8OUTPUT);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+	
 	Local_enuErrorState = DIO_enuSetPinDirection(D1_PORT, D1_PIN, DIO_u8OUTPUT);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+	
 	Local_enuErrorState = DIO_enuSetPinDirection(D0_PORT, D0_PIN, DIO_u8OUTPUT);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	/* Function Set */
 	Local_enuErrorState = LCD_inlenuSendCommand(LCD_8Bit_TwoLine_5_7CharFont);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	_delay_ms(1);
 	
 	#elif LCD_MODE == FOUR_BIT
 	/* Function Set */
 	Local_enuErrorState = LCD_inlenuSendCommand(LCD_4Bit_TwoLine_5_7CharFont);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	_delay_ms(1);
 	
 	#else
@@ -57,82 +99,159 @@ ES_t LCD_enuInit(void)
 	
 	/* Display ON/OFF Control */
 	Local_enuErrorState = LCD_inlenuSendCommand(LCD_DisplayOn_CursorOn_Blinking);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	_delay_ms(1);
 	
 	/* Display Clear */
 	Local_enuErrorState = LCD_inlenuSendCommand(LCD_Clear_Display);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	_delay_ms(2);
 	
 	/* Entry Mode Set */
 	Local_enuErrorState = LCD_inlenuSendCommand(LCD_Increase_NoShift);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	_delay_ms(1);
 	
+	Local_enuErrorState = ES_OK;
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: LCD_enuDisplayChar
+ * @brief		: it is used to display character on LCD
+ * @param [in]	: Copy_u8Data --> it is specify character which will display on LCD
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t LCD_enuDisplayChar(u8 Copy_u8Data)
 {
 	ES_t Local_enuErrorState = ES_NOK;
 	
+	/* Check position in case of we send data */
+	LCD_vidCheckPosition();
+	
 	/* RS --> High to write Data */
 	Local_enuErrorState = DIO_enuSetPinVal(RS_PORT, RS_PIN, DIO_u8HIGH);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	
 	/* Call Latch Function */
 	Local_enuErrorState = LCD_enuLatch(Copy_u8Data);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	
+	Local_enuErrorState = ES_OK;
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: LCD_enuSendCommand
+ * @brief		: it is used to send command to LCD
+ * @param [in]	: Copy_u8Command --> it is specify command which send to LCD
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t LCD_enuSendCommand(u8 Copy_u8Command)
 {
 	ES_t Local_enuErrorState = ES_NOK;
 	
 	/* RS --> LOW to write Command */
 	Local_enuErrorState = DIO_enuSetPinVal(RS_PORT, RS_PIN, DIO_u8LOW);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	
 	/* Call Latch Function */
 	Local_enuErrorState = LCD_enuLatch(Copy_u8Command);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	
+	Local_enuErrorState = ES_OK;
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: LCD_enuLatch
+ * @brief		: it is used to execute the common lines between display char and send command
+ * @param [in]	: Copy_u8Data --> it is specify command or data which send to LCD
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 static ES_t LCD_enuLatch(u8 Copy_u8Data)
 {	
 	ES_t Local_enuErrorState = ES_NOK;
-	u8 Local_u8RSValue = 0;
 	
 	/* RW --> LOW to write */
 	Local_enuErrorState = DIO_enuSetPinVal(RW_PORT, RW_PIN, DIO_u8LOW);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	
 	/* Enable --> LOW */
 	Local_enuErrorState = DIO_enuSetPinVal(EN_PORT, EN_PIN, DIO_u8LOW);
-	
-	/* Check position in case of we send data */
-	DIO_enuGetPinVal(RS_PORT, RS_PIN, &Local_u8RSValue);
-	if(Local_u8RSValue == DIO_u8HIGH)
-	{
-		LCD_vidCheckPosition();
-	}
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	
 	#if LCD_MODE == EIGHT_BIT
 	/* Write Command to Data Pins */
 	Local_enuErrorState = DIO_enuSetPinVal(D7_PORT, D7_PIN, ((Copy_u8Data >> D7_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinVal(D6_PORT, D6_PIN, ((Copy_u8Data >> D6_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinVal(D5_PORT, D5_PIN, ((Copy_u8Data >> D5_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinVal(D4_PORT, D4_PIN, ((Copy_u8Data >> D4_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinVal(D3_PORT, D3_PIN, ((Copy_u8Data >> D3_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinVal(D2_PORT, D2_PIN, ((Copy_u8Data >> D2_POS) & MASK_BIT));
-	Local_enuErrorState = DIO_enuSetPinVal(D1_PORT, D1_PIN, ((Copy_u8Data >> D1_POS) & MASK_BIT));
-	Local_enuErrorState = DIO_enuSetPinVal(D0_PORT, D0_PIN, ((Copy_u8Data >> D0_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	
+	Local_enuErrorState = DIO_enuSetPinVal(D1_PORT, D1_PIN, ((Copy_u8Data >> D1_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
+	Local_enuErrorState = DIO_enuSetPinVal(D0_PORT, D0_PIN, ((Copy_u8Data >> D0_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	#elif LCD_MODE == FOUR_BIT
 	u8 Local_u8FourBitData = 0;
 	/* Send Data from D7..D4 */
 	Local_u8FourBitData = (Copy_u8Data & 0xF0);
 	Local_enuErrorState = DIO_enuSetPinVal(D7_PORT, D7_PIN, ((Local_u8FourBitData >> D7_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinVal(D6_PORT, D6_PIN, ((Local_u8FourBitData >> D6_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinVal(D5_PORT, D5_PIN, ((Local_u8FourBitData >> D5_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinVal(D4_PORT, D4_PIN, ((Local_u8FourBitData >> D4_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	
 	LCD_vidTrigger_LATCH();
 	_delay_ms(1);
@@ -140,16 +259,28 @@ static ES_t LCD_enuLatch(u8 Copy_u8Data)
 	/* Send Data from D3..D0 */
 	Local_u8FourBitData = (Copy_u8Data << FOUR_BIT);
 	Local_enuErrorState = DIO_enuSetPinVal(D7_PORT, D7_PIN, ((Local_u8FourBitData >> D7_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinVal(D6_PORT, D6_PIN, ((Local_u8FourBitData >> D6_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinVal(D5_PORT, D5_PIN, ((Local_u8FourBitData >> D5_POS) & MASK_BIT));
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	Local_enuErrorState = DIO_enuSetPinVal(D4_PORT, D4_PIN, ((Local_u8FourBitData >> D4_POS) & MASK_BIT));
-	
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+		
 	#else
 	#error "LCD Mode has a wrong configuration"
 	#endif
 	
 	LCD_vidTrigger_LATCH();
 	
+	Local_enuErrorState = ES_OK;
 	return Local_enuErrorState;
 }
 
@@ -161,38 +292,75 @@ static void LCD_vidTrigger_LATCH(void)
 	DIO_enuSetPinVal(EN_PORT, EN_PIN, DIO_u8LOW);
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: LCD_inlenuSendCommand
+ * @brief		: it is used to send command to LCD but this is belong to Developer not user
+ * @param [in]	: Copy_u8Command --> it is specify command which send to LCD
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 static inline ES_t LCD_inlenuSendCommand(u8 Copy_u8Command)
 {
 	ES_t Local_enuErrorState = ES_NOK;
 		
 	/* RS --> LOW to write Command */
 	Local_enuErrorState = DIO_enuSetPinVal(RS_PORT, RS_PIN, DIO_u8LOW);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;	
 
 	/* Call Latch Function */
 	Local_enuErrorState = LCD_enuLatch(Copy_u8Command);
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
 	
+	Local_enuErrorState = ES_OK;	
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: LCD_enuGoToPosition
+ * @brief		: it is used to move cursor to a specific position
+ * @param [in]	: Copy_u8Line --> it is specify the line which cursor move to it
+ * @param [in]	: Copy_u8Position --> it is specify the position which cursor move to it
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t LCD_enuGoToPosition(u8 Copy_u8Line, u8 Copy_u8Position)
 {
 	ES_t Local_enuErrorState = ES_NOK;
 	
-	if(Copy_u8Position >= 0 && Copy_u8Position < 16)
+	if(Copy_u8Position >= 0 && Copy_u8Position < 32)
 	{
 		if(Copy_u8Line == LCD_FIRST_LINE)
 		{
 			Local_enuErrorState = LCD_inlenuSendCommand(LCD_BEGIN_AT_FIRST_ROW + Copy_u8Position);
+			if(Local_enuErrorState != ES_OK)
+				return Local_enuErrorState;
 		}
 		else if(Copy_u8Line == LCD_SECOND_LINE)
 		{
 			Local_enuErrorState = LCD_inlenuSendCommand(LCD_BEGIN_AT_SECOND_ROW + Copy_u8Position);
+			if(Local_enuErrorState != ES_OK)
+				return Local_enuErrorState;
 		}
 	}
 	
+	Local_enuErrorState = ES_OK;
 	return Local_enuErrorState;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: LCD_enuGoToPosition
+ * @brief		: it is used to check the position of the cursor
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 static void LCD_vidCheckPosition(void)
 {
 	if(LCD_u8PosCounter == 16)
@@ -212,12 +380,29 @@ static void LCD_vidCheckPosition(void)
 	}
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: LCD_vidClearScreen
+ * @brief		: it is used to clear the display
+ * @retval		: none
+ * @note		: none
+ ******************************************************************************
+**/
 void LCD_vidClearScreen(void)
 {
 	LCD_inlenuSendCommand(LCD_Clear_Display);
 	LCD_u8PosCounter = 0;
 }
 
+/**
+ ******************************************************************************
+ * @Fn			: LCD_enuWriteString
+ * @brief		: it is used to write a string
+ * @param [in]	: Copy_pu8Str --> it is a pointer to the string that we will display it.
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t LCD_enuWriteString(u8 *Copy_pu8Str)
 {
 	ES_t Local_enuErrorState = ES_NOK;
@@ -227,14 +412,46 @@ ES_t LCD_enuWriteString(u8 *Copy_pu8Str)
 		while(*Copy_pu8Str != '\0')
 		{
 			Local_enuErrorState = LCD_enuDisplayChar(*Copy_pu8Str);
+			if(Local_enuErrorState != ES_OK)
+				return Local_enuErrorState;
 			Copy_pu8Str++;
 		}
 		Local_enuErrorState = ES_OK;
 	}
 	else
 	{
-		Local_enuErrorState = ES_NULL_POINTER;
+		return ES_NULL_POINTER;
 	}
 	
+	Local_enuErrorState = ES_OK;
 	return Local_enuErrorState;
 }
+
+/**
+ ******************************************************************************
+ * @Fn			: LCD_enuWriteNumber
+ * @brief		: it is used to write a number
+ * @param [in]	: Copy_s32Number --> it is the number that we will display it.
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
+//ES_t LCD_enuWriteNumber(s32 Copy_s32Number)
+//{
+//	s8 Local_As8Container[16];
+//	
+//	itoa(Copy_s32Number, Local_As8Container, 10);
+//	LCD_enuWriteString(Local_As8Container);
+//	
+//	//if(Copy_s32Number > 0)
+//	//{
+//	//	itoa(Copy_s32Number,Local_As8Container,10);
+//	//	LCD_enuWriteString(Local_As8Container);
+//	//}
+//	//else
+//	//{
+//	//	LCD_enuDisplayChar('-');
+//	//	itoa(Copy_s32Number,Local_As8Container,10);
+//	//	LCD_enuWriteString(Local_As8Container);
+//	//}
+//}

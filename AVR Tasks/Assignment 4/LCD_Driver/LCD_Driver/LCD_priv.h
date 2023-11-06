@@ -26,7 +26,7 @@
 #define MASK_BIT			1
 
 static inline ES_t LCD_inlenuSendCommand(u8 Copy_u8Command);
-static ES_t LCD_enuLatch(u8 Copy_u8Command);
+static ES_t LCD_enuLatch(u8 Copy_u8Data);
 static void LCD_vidCheckPosition(void);
 static void LCD_vidTrigger_LATCH(void);
 

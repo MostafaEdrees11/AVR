@@ -3,31 +3,31 @@ LCD_Driver.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         0000059a  00000000  00000000  00000094  2**1
+  0 .text         0000058c  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000010  00800060  0000059a  0000062e  2**0
+  1 .data         0000001c  00800060  0000058c  00000620  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000001  00800070  00800070  0000063e  2**0
+  2 .bss          00000001  0080007c  0080007c  0000063c  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000063e  2**0
+  3 .comment      00000030  00000000  00000000  0000063c  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000670  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000066c  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000e0  00000000  00000000  000006ac  2**0
+  5 .debug_aranges 000000e8  00000000  00000000  000006a8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00001444  00000000  00000000  0000078c  2**0
+  6 .debug_info   00001423  00000000  00000000  00000790  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000081a  00000000  00000000  00001bd0  2**0
+  7 .debug_abbrev 00000931  00000000  00000000  00001bb3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000009fa  00000000  00000000  000023ea  2**0
+  8 .debug_line   00000bc7  00000000  00000000  000024e4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000001a8  00000000  00000000  00002de4  2**2
+  9 .debug_frame  000001b0  00000000  00000000  000030ac  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000059b  00000000  00000000  00002f8c  2**0
+ 10 .debug_str    00000591  00000000  00000000  0000325c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000cda  00000000  00000000  00003527  2**0
+ 11 .debug_loc    00000e63  00000000  00000000  000037ed  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000b0  00000000  00000000  00004201  2**0
+ 12 .debug_ranges 000000b8  00000000  00000000  00004650  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -67,18 +67,18 @@ Disassembly of section .text:
   60:	10 e0       	ldi	r17, 0x00	; 0
   62:	a0 e6       	ldi	r26, 0x60	; 96
   64:	b0 e0       	ldi	r27, 0x00	; 0
-  66:	ea e9       	ldi	r30, 0x9A	; 154
+  66:	ec e8       	ldi	r30, 0x8C	; 140
   68:	f5 e0       	ldi	r31, 0x05	; 5
   6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
   6c:	05 90       	lpm	r0, Z+
   6e:	0d 92       	st	X+, r0
-  70:	a0 37       	cpi	r26, 0x70	; 112
+  70:	ac 37       	cpi	r26, 0x7C	; 124
   72:	b1 07       	cpc	r27, r17
   74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
 
 00000076 <__do_clear_bss>:
   76:	20 e0       	ldi	r18, 0x00	; 0
-  78:	a0 e7       	ldi	r26, 0x70	; 112
+  78:	ac e7       	ldi	r26, 0x7C	; 124
   7a:	b0 e0       	ldi	r27, 0x00	; 0
   7c:	01 c0       	rjmp	.+2      	; 0x80 <.do_clear_bss_start>
 
@@ -86,11 +86,11 @@ Disassembly of section .text:
   7e:	1d 92       	st	X+, r1
 
 00000080 <.do_clear_bss_start>:
-  80:	a1 37       	cpi	r26, 0x71	; 113
+  80:	ad 37       	cpi	r26, 0x7D	; 125
   82:	b2 07       	cpc	r27, r18
   84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
-  86:	0e 94 bb 02 	call	0x576	; 0x576 <main>
-  8a:	0c 94 cb 02 	jmp	0x596	; 0x596 <_exit>
+  86:	0e 94 a1 02 	call	0x542	; 0x542 <main>
+  8a:	0c 94 c4 02 	jmp	0x588	; 0x588 <_exit>
 
 0000008e <__bad_interrupt>:
   8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -501,525 +501,567 @@ ES_t DIO_enuSetPinVal(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 Copy_u8Value)
 }
  258:	08 95       	ret
 
-0000025a <DIO_enuGetPinVal>:
+0000025a <LCD_vidTrigger_LATCH>:
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+	
+	Local_enuErrorState = ES_OK;
+	return Local_enuErrorState;
+}
+ 25a:	41 e0       	ldi	r20, 0x01	; 1
+ 25c:	62 e0       	ldi	r22, 0x02	; 2
+ 25e:	80 e0       	ldi	r24, 0x00	; 0
+ 260:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 264:	83 ec       	ldi	r24, 0xC3	; 195
+ 266:	99 e0       	ldi	r25, 0x09	; 9
+ 268:	01 97       	sbiw	r24, 0x01	; 1
+ 26a:	f1 f7       	brne	.-4      	; 0x268 <LCD_vidTrigger_LATCH+0xe>
+ 26c:	00 c0       	rjmp	.+0      	; 0x26e <LCD_vidTrigger_LATCH+0x14>
+ 26e:	00 00       	nop
+ 270:	40 e0       	ldi	r20, 0x00	; 0
+ 272:	62 e0       	ldi	r22, 0x02	; 2
+ 274:	80 e0       	ldi	r24, 0x00	; 0
+ 276:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 27a:	08 95       	ret
+
+0000027c <LCD_enuLatch>:
+ 27c:	cf 93       	push	r28
+ 27e:	c8 2f       	mov	r28, r24
+ 280:	40 e0       	ldi	r20, 0x00	; 0
+ 282:	61 e0       	ldi	r22, 0x01	; 1
+ 284:	80 e0       	ldi	r24, 0x00	; 0
+ 286:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 28a:	81 11       	cpse	r24, r1
+ 28c:	51 c0       	rjmp	.+162    	; 0x330 <LCD_enuLatch+0xb4>
+ 28e:	40 e0       	ldi	r20, 0x00	; 0
+ 290:	62 e0       	ldi	r22, 0x02	; 2
+ 292:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 296:	81 11       	cpse	r24, r1
+ 298:	4b c0       	rjmp	.+150    	; 0x330 <LCD_enuLatch+0xb4>
+ 29a:	4c 2f       	mov	r20, r28
+ 29c:	44 1f       	adc	r20, r20
+ 29e:	44 27       	eor	r20, r20
+ 2a0:	44 1f       	adc	r20, r20
+ 2a2:	67 e0       	ldi	r22, 0x07	; 7
+ 2a4:	81 e0       	ldi	r24, 0x01	; 1
+ 2a6:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 2aa:	81 11       	cpse	r24, r1
+ 2ac:	41 c0       	rjmp	.+130    	; 0x330 <LCD_enuLatch+0xb4>
+ 2ae:	c6 fb       	bst	r28, 6
+ 2b0:	44 27       	eor	r20, r20
+ 2b2:	40 f9       	bld	r20, 0
+ 2b4:	66 e0       	ldi	r22, 0x06	; 6
+ 2b6:	81 e0       	ldi	r24, 0x01	; 1
+ 2b8:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 2bc:	81 11       	cpse	r24, r1
+ 2be:	38 c0       	rjmp	.+112    	; 0x330 <LCD_enuLatch+0xb4>
+ 2c0:	c5 fb       	bst	r28, 5
+ 2c2:	44 27       	eor	r20, r20
+ 2c4:	40 f9       	bld	r20, 0
+ 2c6:	65 e0       	ldi	r22, 0x05	; 5
+ 2c8:	81 e0       	ldi	r24, 0x01	; 1
+ 2ca:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 2ce:	81 11       	cpse	r24, r1
+ 2d0:	2f c0       	rjmp	.+94     	; 0x330 <LCD_enuLatch+0xb4>
+ 2d2:	c4 fb       	bst	r28, 4
+ 2d4:	44 27       	eor	r20, r20
+ 2d6:	40 f9       	bld	r20, 0
+ 2d8:	64 e0       	ldi	r22, 0x04	; 4
+ 2da:	81 e0       	ldi	r24, 0x01	; 1
+ 2dc:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 2e0:	81 11       	cpse	r24, r1
+ 2e2:	26 c0       	rjmp	.+76     	; 0x330 <LCD_enuLatch+0xb4>
+ 2e4:	c3 fb       	bst	r28, 3
+ 2e6:	44 27       	eor	r20, r20
+ 2e8:	40 f9       	bld	r20, 0
+ 2ea:	63 e0       	ldi	r22, 0x03	; 3
+ 2ec:	81 e0       	ldi	r24, 0x01	; 1
+ 2ee:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 2f2:	81 11       	cpse	r24, r1
+ 2f4:	1d c0       	rjmp	.+58     	; 0x330 <LCD_enuLatch+0xb4>
+ 2f6:	c2 fb       	bst	r28, 2
+ 2f8:	44 27       	eor	r20, r20
+ 2fa:	40 f9       	bld	r20, 0
+ 2fc:	62 e0       	ldi	r22, 0x02	; 2
+ 2fe:	81 e0       	ldi	r24, 0x01	; 1
+ 300:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 304:	81 11       	cpse	r24, r1
+ 306:	14 c0       	rjmp	.+40     	; 0x330 <LCD_enuLatch+0xb4>
+ 308:	c1 fb       	bst	r28, 1
+ 30a:	44 27       	eor	r20, r20
+ 30c:	40 f9       	bld	r20, 0
+ 30e:	61 e0       	ldi	r22, 0x01	; 1
+ 310:	81 e0       	ldi	r24, 0x01	; 1
+ 312:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 316:	81 11       	cpse	r24, r1
+ 318:	0b c0       	rjmp	.+22     	; 0x330 <LCD_enuLatch+0xb4>
+ 31a:	4c 2f       	mov	r20, r28
+ 31c:	41 70       	andi	r20, 0x01	; 1
+ 31e:	60 e0       	ldi	r22, 0x00	; 0
+ 320:	81 e0       	ldi	r24, 0x01	; 1
+ 322:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 326:	81 11       	cpse	r24, r1
+ 328:	03 c0       	rjmp	.+6      	; 0x330 <LCD_enuLatch+0xb4>
+ 32a:	0e 94 2d 01 	call	0x25a	; 0x25a <LCD_vidTrigger_LATCH>
+ 32e:	80 e0       	ldi	r24, 0x00	; 0
+ 330:	cf 91       	pop	r28
+ 332:	08 95       	ret
+
+00000334 <LCD_inlenuSendCommand>:
+ 334:	cf 93       	push	r28
+ 336:	c8 2f       	mov	r28, r24
+ 338:	40 e0       	ldi	r20, 0x00	; 0
+ 33a:	60 e0       	ldi	r22, 0x00	; 0
+ 33c:	80 e0       	ldi	r24, 0x00	; 0
+ 33e:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+ 342:	81 11       	cpse	r24, r1
+ 344:	03 c0       	rjmp	.+6      	; 0x34c <LCD_inlenuSendCommand+0x18>
+ 346:	8c 2f       	mov	r24, r28
+ 348:	0e 94 3e 01 	call	0x27c	; 0x27c <LCD_enuLatch>
+ 34c:	cf 91       	pop	r28
+ 34e:	08 95       	ret
+
+00000350 <LCD_enuInit>:
+ 350:	41 e0       	ldi	r20, 0x01	; 1
+ 352:	60 e0       	ldi	r22, 0x00	; 0
+ 354:	80 e0       	ldi	r24, 0x00	; 0
+ 356:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
+ 35a:	81 11       	cpse	r24, r1
+ 35c:	77 c0       	rjmp	.+238    	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 35e:	41 e0       	ldi	r20, 0x01	; 1
+ 360:	61 e0       	ldi	r22, 0x01	; 1
+ 362:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
+ 366:	81 11       	cpse	r24, r1
+ 368:	71 c0       	rjmp	.+226    	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 36a:	41 e0       	ldi	r20, 0x01	; 1
+ 36c:	62 e0       	ldi	r22, 0x02	; 2
+ 36e:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
+ 372:	81 11       	cpse	r24, r1
+ 374:	6b c0       	rjmp	.+214    	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 376:	41 e0       	ldi	r20, 0x01	; 1
+ 378:	67 e0       	ldi	r22, 0x07	; 7
+ 37a:	81 e0       	ldi	r24, 0x01	; 1
+ 37c:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
+ 380:	81 11       	cpse	r24, r1
+ 382:	64 c0       	rjmp	.+200    	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 384:	41 e0       	ldi	r20, 0x01	; 1
+ 386:	66 e0       	ldi	r22, 0x06	; 6
+ 388:	81 e0       	ldi	r24, 0x01	; 1
+ 38a:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
+ 38e:	81 11       	cpse	r24, r1
+ 390:	5d c0       	rjmp	.+186    	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 392:	41 e0       	ldi	r20, 0x01	; 1
+ 394:	65 e0       	ldi	r22, 0x05	; 5
+ 396:	81 e0       	ldi	r24, 0x01	; 1
+ 398:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
+ 39c:	81 11       	cpse	r24, r1
+ 39e:	56 c0       	rjmp	.+172    	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 3a0:	41 e0       	ldi	r20, 0x01	; 1
+ 3a2:	64 e0       	ldi	r22, 0x04	; 4
+ 3a4:	81 e0       	ldi	r24, 0x01	; 1
+ 3a6:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
+ 3aa:	81 11       	cpse	r24, r1
+ 3ac:	4f c0       	rjmp	.+158    	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 3ae:	8d e2       	ldi	r24, 0x2D	; 45
+ 3b0:	92 e2       	ldi	r25, 0x22	; 34
+ 3b2:	01 97       	sbiw	r24, 0x01	; 1
+ 3b4:	f1 f7       	brne	.-4      	; 0x3b2 <LCD_enuInit+0x62>
+ 3b6:	00 c0       	rjmp	.+0      	; 0x3b8 <LCD_enuInit+0x68>
+ 3b8:	00 00       	nop
+ 3ba:	41 e0       	ldi	r20, 0x01	; 1
+ 3bc:	63 e0       	ldi	r22, 0x03	; 3
+ 3be:	81 e0       	ldi	r24, 0x01	; 1
+ 3c0:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
+ 3c4:	81 11       	cpse	r24, r1
+ 3c6:	42 c0       	rjmp	.+132    	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 3c8:	41 e0       	ldi	r20, 0x01	; 1
+ 3ca:	62 e0       	ldi	r22, 0x02	; 2
+ 3cc:	81 e0       	ldi	r24, 0x01	; 1
+ 3ce:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
+ 3d2:	81 11       	cpse	r24, r1
+ 3d4:	3b c0       	rjmp	.+118    	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 3d6:	41 e0       	ldi	r20, 0x01	; 1
+ 3d8:	61 e0       	ldi	r22, 0x01	; 1
+ 3da:	81 e0       	ldi	r24, 0x01	; 1
+ 3dc:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
+ 3e0:	81 11       	cpse	r24, r1
+ 3e2:	34 c0       	rjmp	.+104    	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 3e4:	41 e0       	ldi	r20, 0x01	; 1
+ 3e6:	60 e0       	ldi	r22, 0x00	; 0
+ 3e8:	81 e0       	ldi	r24, 0x01	; 1
+ 3ea:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
+ 3ee:	81 11       	cpse	r24, r1
+ 3f0:	2d c0       	rjmp	.+90     	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 3f2:	88 e3       	ldi	r24, 0x38	; 56
+ 3f4:	0e 94 9a 01 	call	0x334	; 0x334 <LCD_inlenuSendCommand>
+ 3f8:	81 11       	cpse	r24, r1
+ 3fa:	28 c0       	rjmp	.+80     	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 3fc:	89 ef       	ldi	r24, 0xF9	; 249
+ 3fe:	90 e0       	ldi	r25, 0x00	; 0
+ 400:	01 97       	sbiw	r24, 0x01	; 1
+ 402:	f1 f7       	brne	.-4      	; 0x400 <__EEPROM_REGION_LENGTH__>
+ 404:	00 c0       	rjmp	.+0      	; 0x406 <__EEPROM_REGION_LENGTH__+0x6>
+ 406:	00 00       	nop
+ 408:	8f e0       	ldi	r24, 0x0F	; 15
+ 40a:	0e 94 9a 01 	call	0x334	; 0x334 <LCD_inlenuSendCommand>
+ 40e:	81 11       	cpse	r24, r1
+ 410:	1d c0       	rjmp	.+58     	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 412:	89 ef       	ldi	r24, 0xF9	; 249
+ 414:	90 e0       	ldi	r25, 0x00	; 0
+ 416:	01 97       	sbiw	r24, 0x01	; 1
+ 418:	f1 f7       	brne	.-4      	; 0x416 <__EEPROM_REGION_LENGTH__+0x16>
+ 41a:	00 c0       	rjmp	.+0      	; 0x41c <__EEPROM_REGION_LENGTH__+0x1c>
+ 41c:	00 00       	nop
+ 41e:	81 e0       	ldi	r24, 0x01	; 1
+ 420:	0e 94 9a 01 	call	0x334	; 0x334 <LCD_inlenuSendCommand>
+ 424:	81 11       	cpse	r24, r1
+ 426:	12 c0       	rjmp	.+36     	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 428:	83 ef       	ldi	r24, 0xF3	; 243
+ 42a:	91 e0       	ldi	r25, 0x01	; 1
+ 42c:	01 97       	sbiw	r24, 0x01	; 1
+ 42e:	f1 f7       	brne	.-4      	; 0x42c <__EEPROM_REGION_LENGTH__+0x2c>
+ 430:	00 c0       	rjmp	.+0      	; 0x432 <__EEPROM_REGION_LENGTH__+0x32>
+ 432:	00 00       	nop
+ 434:	86 e0       	ldi	r24, 0x06	; 6
+ 436:	0e 94 9a 01 	call	0x334	; 0x334 <LCD_inlenuSendCommand>
+ 43a:	81 11       	cpse	r24, r1
+ 43c:	07 c0       	rjmp	.+14     	; 0x44c <__EEPROM_REGION_LENGTH__+0x4c>
+ 43e:	89 ef       	ldi	r24, 0xF9	; 249
+ 440:	90 e0       	ldi	r25, 0x00	; 0
+ 442:	01 97       	sbiw	r24, 0x01	; 1
+ 444:	f1 f7       	brne	.-4      	; 0x442 <__EEPROM_REGION_LENGTH__+0x42>
+ 446:	00 c0       	rjmp	.+0      	; 0x448 <__EEPROM_REGION_LENGTH__+0x48>
+ 448:	00 00       	nop
+ 44a:	80 e0       	ldi	r24, 0x00	; 0
+ 44c:	08 95       	ret
+
+0000044e <LCD_enuGoToPosition>:
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
 **/
-ES_t DIO_enuGetPinVal(u8 Copy_u8PortID, u8 Copy_u8PinID, u8 *Copy_pu8Value)
+ES_t LCD_enuGoToPosition(u8 Copy_u8Line, u8 Copy_u8Position)
 {
+ 44e:	cf 93       	push	r28
 	ES_t Local_enuErrorState = ES_NOK;
 	
-	if(Copy_pu8Value != NULL)
- 25a:	41 15       	cp	r20, r1
- 25c:	51 05       	cpc	r21, r1
- 25e:	e1 f1       	breq	.+120    	; 0x2d8 <DIO_enuGetPinVal+0x7e>
+	if(Copy_u8Position >= 0 && Copy_u8Position < 32)
+ 450:	60 32       	cpi	r22, 0x20	; 32
+ 452:	f0 f4       	brcc	.+60     	; 0x490 <LCD_enuGoToPosition+0x42>
 	{
-		if(Copy_u8PortID <= DIO_PORTD && Copy_u8PinID <= DIO_PIN7)
- 260:	84 30       	cpi	r24, 0x04	; 4
- 262:	e0 f5       	brcc	.+120    	; 0x2dc <DIO_enuGetPinVal+0x82>
- 264:	68 30       	cpi	r22, 0x08	; 8
- 266:	e0 f5       	brcc	.+120    	; 0x2e0 <DIO_enuGetPinVal+0x86>
+		if(Copy_u8Line == LCD_FIRST_LINE)
+ 454:	81 30       	cpi	r24, 0x01	; 1
+ 456:	69 f4       	brne	.+26     	; 0x472 <LCD_enuGoToPosition+0x24>
 		{
-			switch(Copy_u8PortID)
- 268:	81 30       	cpi	r24, 0x01	; 1
- 26a:	91 f0       	breq	.+36     	; 0x290 <DIO_enuGetPinVal+0x36>
- 26c:	28 f0       	brcs	.+10     	; 0x278 <DIO_enuGetPinVal+0x1e>
- 26e:	82 30       	cpi	r24, 0x02	; 2
- 270:	d9 f0       	breq	.+54     	; 0x2a8 <DIO_enuGetPinVal+0x4e>
- 272:	83 30       	cpi	r24, 0x03	; 3
- 274:	29 f1       	breq	.+74     	; 0x2c0 <DIO_enuGetPinVal+0x66>
- 276:	36 c0       	rjmp	.+108    	; 0x2e4 <DIO_enuGetPinVal+0x8a>
-			{
-				case DIO_PORTA:
-				*Copy_pu8Value = ((PINA >> Copy_u8PinID) & DIO_MASK_BIT);
- 278:	89 b3       	in	r24, 0x19	; 25
- 27a:	90 e0       	ldi	r25, 0x00	; 0
- 27c:	02 c0       	rjmp	.+4      	; 0x282 <DIO_enuGetPinVal+0x28>
- 27e:	95 95       	asr	r25
- 280:	87 95       	ror	r24
- 282:	6a 95       	dec	r22
- 284:	e2 f7       	brpl	.-8      	; 0x27e <DIO_enuGetPinVal+0x24>
- 286:	81 70       	andi	r24, 0x01	; 1
- 288:	fa 01       	movw	r30, r20
- 28a:	80 83       	st	Z, r24
-		}
-		else
+			Local_enuErrorState = LCD_inlenuSendCommand(LCD_BEGIN_AT_FIRST_ROW + Copy_u8Position);
+ 458:	c0 e8       	ldi	r28, 0x80	; 128
+ 45a:	c6 0f       	add	r28, r22
+static inline ES_t LCD_inlenuSendCommand(u8 Copy_u8Command)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+		
+	/* RS --> LOW to write Command */
+	Local_enuErrorState = DIO_enuSetPinVal(RS_PORT, RS_PIN, DIO_u8LOW);
+ 45c:	40 e0       	ldi	r20, 0x00	; 0
+ 45e:	60 e0       	ldi	r22, 0x00	; 0
+ 460:	80 e0       	ldi	r24, 0x00	; 0
+ 462:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+	if(Local_enuErrorState != ES_OK)
+ 466:	81 11       	cpse	r24, r1
+ 468:	16 c0       	rjmp	.+44     	; 0x496 <LCD_enuGoToPosition+0x48>
+		return Local_enuErrorState;	
+
+	/* Call Latch Function */
+	Local_enuErrorState = LCD_enuLatch(Copy_u8Command);
+ 46a:	8c 2f       	mov	r24, r28
+ 46c:	0e 94 3e 01 	call	0x27c	; 0x27c <LCD_enuLatch>
+ 470:	12 c0       	rjmp	.+36     	; 0x496 <LCD_enuGoToPosition+0x48>
 		{
-			Local_enuErrorState = ES_OUT_OF_RANGE;
+			Local_enuErrorState = LCD_inlenuSendCommand(LCD_BEGIN_AT_FIRST_ROW + Copy_u8Position);
+			if(Local_enuErrorState != ES_OK)
+				return Local_enuErrorState;
 		}
-		Local_enuErrorState = ES_OK;
- 28c:	80 e0       	ldi	r24, 0x00	; 0
+		else if(Copy_u8Line == LCD_SECOND_LINE)
+ 472:	82 30       	cpi	r24, 0x02	; 2
+ 474:	79 f4       	brne	.+30     	; 0x494 <LCD_enuGoToPosition+0x46>
 		{
-			switch(Copy_u8PortID)
-			{
-				case DIO_PORTA:
-				*Copy_pu8Value = ((PINA >> Copy_u8PinID) & DIO_MASK_BIT);
-				break;
- 28e:	08 95       	ret
-				
-				case DIO_PORTB:
-				*Copy_pu8Value = ((PINB >> Copy_u8PinID) & DIO_MASK_BIT);
- 290:	86 b3       	in	r24, 0x16	; 22
- 292:	90 e0       	ldi	r25, 0x00	; 0
- 294:	02 c0       	rjmp	.+4      	; 0x29a <DIO_enuGetPinVal+0x40>
- 296:	95 95       	asr	r25
- 298:	87 95       	ror	r24
- 29a:	6a 95       	dec	r22
- 29c:	e2 f7       	brpl	.-8      	; 0x296 <DIO_enuGetPinVal+0x3c>
- 29e:	81 70       	andi	r24, 0x01	; 1
- 2a0:	fa 01       	movw	r30, r20
- 2a2:	80 83       	st	Z, r24
+			Local_enuErrorState = LCD_inlenuSendCommand(LCD_BEGIN_AT_SECOND_ROW + Copy_u8Position);
+ 476:	c0 ec       	ldi	r28, 0xC0	; 192
+ 478:	c6 0f       	add	r28, r22
+static inline ES_t LCD_inlenuSendCommand(u8 Copy_u8Command)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+		
+	/* RS --> LOW to write Command */
+	Local_enuErrorState = DIO_enuSetPinVal(RS_PORT, RS_PIN, DIO_u8LOW);
+ 47a:	40 e0       	ldi	r20, 0x00	; 0
+ 47c:	60 e0       	ldi	r22, 0x00	; 0
+ 47e:	80 e0       	ldi	r24, 0x00	; 0
+ 480:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+	if(Local_enuErrorState != ES_OK)
+ 484:	81 11       	cpse	r24, r1
+ 486:	07 c0       	rjmp	.+14     	; 0x496 <LCD_enuGoToPosition+0x48>
+		return Local_enuErrorState;	
+
+	/* Call Latch Function */
+	Local_enuErrorState = LCD_enuLatch(Copy_u8Command);
+ 488:	8c 2f       	mov	r24, r28
+ 48a:	0e 94 3e 01 	call	0x27c	; 0x27c <LCD_enuLatch>
+ 48e:	03 c0       	rjmp	.+6      	; 0x496 <LCD_enuGoToPosition+0x48>
+				return Local_enuErrorState;
 		}
-		else
-		{
-			Local_enuErrorState = ES_OUT_OF_RANGE;
-		}
-		Local_enuErrorState = ES_OK;
- 2a4:	80 e0       	ldi	r24, 0x00	; 0
-				*Copy_pu8Value = ((PINA >> Copy_u8PinID) & DIO_MASK_BIT);
-				break;
-				
-				case DIO_PORTB:
-				*Copy_pu8Value = ((PINB >> Copy_u8PinID) & DIO_MASK_BIT);
-				break;
- 2a6:	08 95       	ret
-				
-				case DIO_PORTC:
-				*Copy_pu8Value = ((PINC >> Copy_u8PinID) & DIO_MASK_BIT);
- 2a8:	83 b3       	in	r24, 0x13	; 19
- 2aa:	90 e0       	ldi	r25, 0x00	; 0
- 2ac:	02 c0       	rjmp	.+4      	; 0x2b2 <DIO_enuGetPinVal+0x58>
- 2ae:	95 95       	asr	r25
- 2b0:	87 95       	ror	r24
- 2b2:	6a 95       	dec	r22
- 2b4:	e2 f7       	brpl	.-8      	; 0x2ae <DIO_enuGetPinVal+0x54>
- 2b6:	81 70       	andi	r24, 0x01	; 1
- 2b8:	fa 01       	movw	r30, r20
- 2ba:	80 83       	st	Z, r24
-		}
-		else
-		{
-			Local_enuErrorState = ES_OUT_OF_RANGE;
-		}
-		Local_enuErrorState = ES_OK;
- 2bc:	80 e0       	ldi	r24, 0x00	; 0
-				*Copy_pu8Value = ((PINB >> Copy_u8PinID) & DIO_MASK_BIT);
-				break;
-				
-				case DIO_PORTC:
-				*Copy_pu8Value = ((PINC >> Copy_u8PinID) & DIO_MASK_BIT);
-				break;
- 2be:	08 95       	ret
-				
-				case DIO_PORTD:
-				*Copy_pu8Value = ((PIND >> Copy_u8PinID) & DIO_MASK_BIT);
- 2c0:	80 b3       	in	r24, 0x10	; 16
- 2c2:	90 e0       	ldi	r25, 0x00	; 0
- 2c4:	02 c0       	rjmp	.+4      	; 0x2ca <DIO_enuGetPinVal+0x70>
- 2c6:	95 95       	asr	r25
- 2c8:	87 95       	ror	r24
- 2ca:	6a 95       	dec	r22
- 2cc:	e2 f7       	brpl	.-8      	; 0x2c6 <DIO_enuGetPinVal+0x6c>
- 2ce:	81 70       	andi	r24, 0x01	; 1
- 2d0:	fa 01       	movw	r30, r20
- 2d2:	80 83       	st	Z, r24
-		}
-		else
-		{
-			Local_enuErrorState = ES_OUT_OF_RANGE;
-		}
-		Local_enuErrorState = ES_OK;
- 2d4:	80 e0       	ldi	r24, 0x00	; 0
-				*Copy_pu8Value = ((PINC >> Copy_u8PinID) & DIO_MASK_BIT);
-				break;
-				
-				case DIO_PORTD:
-				*Copy_pu8Value = ((PIND >> Copy_u8PinID) & DIO_MASK_BIT);
-				break;
- 2d6:	08 95       	ret
-		}
-		Local_enuErrorState = ES_OK;
+	}
+	
+	Local_enuErrorState = ES_OK;
+	return Local_enuErrorState;
+ 490:	80 e0       	ldi	r24, 0x00	; 0
+ 492:	01 c0       	rjmp	.+2      	; 0x496 <LCD_enuGoToPosition+0x48>
+ 494:	80 e0       	ldi	r24, 0x00	; 0
+}
+ 496:	cf 91       	pop	r28
+ 498:	08 95       	ret
+
+0000049a <LCD_vidCheckPosition>:
+ * @note		: none
+ ******************************************************************************
+**/
+static void LCD_vidCheckPosition(void)
+{
+	if(LCD_u8PosCounter == 16)
+ 49a:	80 91 7c 00 	lds	r24, 0x007C	; 0x80007c <__data_end>
+ 49e:	80 31       	cpi	r24, 0x10	; 16
+ 4a0:	51 f4       	brne	.+20     	; 0x4b6 <LCD_vidCheckPosition+0x1c>
+	{
+		LCD_enuGoToPosition(LCD_SECOND_LINE, 0);
+ 4a2:	60 e0       	ldi	r22, 0x00	; 0
+ 4a4:	82 e0       	ldi	r24, 0x02	; 2
+ 4a6:	0e 94 27 02 	call	0x44e	; 0x44e <LCD_enuGoToPosition>
+		LCD_u8PosCounter++;
+ 4aa:	80 91 7c 00 	lds	r24, 0x007C	; 0x80007c <__data_end>
+ 4ae:	8f 5f       	subi	r24, 0xFF	; 255
+ 4b0:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__data_end>
+ 4b4:	08 95       	ret
+	}
+	else if(LCD_u8PosCounter == 32)
+ 4b6:	80 32       	cpi	r24, 0x20	; 32
+ 4b8:	89 f4       	brne	.+34     	; 0x4dc <LCD_vidCheckPosition+0x42>
+static inline ES_t LCD_inlenuSendCommand(u8 Copy_u8Command)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+		
+	/* RS --> LOW to write Command */
+	Local_enuErrorState = DIO_enuSetPinVal(RS_PORT, RS_PIN, DIO_u8LOW);
+ 4ba:	40 e0       	ldi	r20, 0x00	; 0
+ 4bc:	60 e0       	ldi	r22, 0x00	; 0
+ 4be:	80 e0       	ldi	r24, 0x00	; 0
+ 4c0:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+	if(Local_enuErrorState != ES_OK)
+ 4c4:	81 11       	cpse	r24, r1
+ 4c6:	03 c0       	rjmp	.+6      	; 0x4ce <LCD_vidCheckPosition+0x34>
+		return Local_enuErrorState;	
+
+	/* Call Latch Function */
+	Local_enuErrorState = LCD_enuLatch(Copy_u8Command);
+ 4c8:	81 e0       	ldi	r24, 0x01	; 1
+ 4ca:	0e 94 3e 01 	call	0x27c	; 0x27c <LCD_enuLatch>
+		LCD_u8PosCounter++;
+	}
+	else if(LCD_u8PosCounter == 32)
+	{
+		LCD_inlenuSendCommand(LCD_Clear_Display);
+		LCD_enuGoToPosition(LCD_FIRST_LINE, 0);
+ 4ce:	60 e0       	ldi	r22, 0x00	; 0
+ 4d0:	81 e0       	ldi	r24, 0x01	; 1
+ 4d2:	0e 94 27 02 	call	0x44e	; 0x44e <LCD_enuGoToPosition>
+		LCD_u8PosCounter = 0;
+ 4d6:	10 92 7c 00 	sts	0x007C, r1	; 0x80007c <__data_end>
+ 4da:	08 95       	ret
 	}
 	else
 	{
-		Local_enuErrorState = ES_NULL_POINTER;
- 2d8:	82 e0       	ldi	r24, 0x02	; 2
- 2da:	08 95       	ret
-		}
-		else
-		{
-			Local_enuErrorState = ES_OUT_OF_RANGE;
-		}
-		Local_enuErrorState = ES_OK;
- 2dc:	80 e0       	ldi	r24, 0x00	; 0
- 2de:	08 95       	ret
- 2e0:	80 e0       	ldi	r24, 0x00	; 0
- 2e2:	08 95       	ret
- 2e4:	80 e0       	ldi	r24, 0x00	; 0
-	{
-		Local_enuErrorState = ES_NULL_POINTER;
-	}
+		LCD_u8PosCounter++;
+ 4dc:	8f 5f       	subi	r24, 0xFF	; 255
+ 4de:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__data_end>
+ 4e2:	08 95       	ret
+
+000004e4 <LCD_enuDisplayChar>:
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
+ES_t LCD_enuDisplayChar(u8 Copy_u8Data)
+{
+ 4e4:	cf 93       	push	r28
+ 4e6:	c8 2f       	mov	r28, r24
+	ES_t Local_enuErrorState = ES_NOK;
 	
+	/* Check position in case of we send data */
+	LCD_vidCheckPosition();
+ 4e8:	0e 94 4d 02 	call	0x49a	; 0x49a <LCD_vidCheckPosition>
+	
+	/* RS --> High to write Data */
+	Local_enuErrorState = DIO_enuSetPinVal(RS_PORT, RS_PIN, DIO_u8HIGH);
+ 4ec:	41 e0       	ldi	r20, 0x01	; 1
+ 4ee:	60 e0       	ldi	r22, 0x00	; 0
+ 4f0:	80 e0       	ldi	r24, 0x00	; 0
+ 4f2:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
+	if(Local_enuErrorState != ES_OK)
+ 4f6:	81 11       	cpse	r24, r1
+ 4f8:	03 c0       	rjmp	.+6      	; 0x500 <LCD_enuDisplayChar+0x1c>
+		return Local_enuErrorState;
+	
+	/* Call Latch Function */
+	Local_enuErrorState = LCD_enuLatch(Copy_u8Data);
+ 4fa:	8c 2f       	mov	r24, r28
+ 4fc:	0e 94 3e 01 	call	0x27c	; 0x27c <LCD_enuLatch>
+	if(Local_enuErrorState != ES_OK)
+		return Local_enuErrorState;
+	
+	Local_enuErrorState = ES_OK;
 	return Local_enuErrorState;
 }
- 2e6:	08 95       	ret
+ 500:	cf 91       	pop	r28
+ 502:	08 95       	ret
 
-000002e8 <LCD_vidTrigger_LATCH>:
-}
-
-void LCD_vidClearScreen(void)
+00000504 <LCD_vidClearScreen>:
+static inline ES_t LCD_inlenuSendCommand(u8 Copy_u8Command)
 {
-	LCD_inlenuSendCommand(LCD_Clear_Display);
-	LCD_u8PosCounter = 0;
- 2e8:	41 e0       	ldi	r20, 0x01	; 1
- 2ea:	62 e0       	ldi	r22, 0x02	; 2
- 2ec:	80 e0       	ldi	r24, 0x00	; 0
- 2ee:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 2f2:	83 ec       	ldi	r24, 0xC3	; 195
- 2f4:	99 e0       	ldi	r25, 0x09	; 9
- 2f6:	01 97       	sbiw	r24, 0x01	; 1
- 2f8:	f1 f7       	brne	.-4      	; 0x2f6 <LCD_vidTrigger_LATCH+0xe>
- 2fa:	00 c0       	rjmp	.+0      	; 0x2fc <LCD_vidTrigger_LATCH+0x14>
- 2fc:	00 00       	nop
- 2fe:	40 e0       	ldi	r20, 0x00	; 0
- 300:	62 e0       	ldi	r22, 0x02	; 2
- 302:	80 e0       	ldi	r24, 0x00	; 0
- 304:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 308:	08 95       	ret
-
-0000030a <LCD_enuGoToPosition>:
- 30a:	cf 93       	push	r28
- 30c:	60 31       	cpi	r22, 0x10	; 16
- 30e:	d0 f4       	brcc	.+52     	; 0x344 <LCD_enuGoToPosition+0x3a>
- 310:	81 30       	cpi	r24, 0x01	; 1
- 312:	59 f4       	brne	.+22     	; 0x32a <LCD_enuGoToPosition+0x20>
- 314:	c0 e8       	ldi	r28, 0x80	; 128
- 316:	c6 0f       	add	r28, r22
- 318:	40 e0       	ldi	r20, 0x00	; 0
- 31a:	60 e0       	ldi	r22, 0x00	; 0
- 31c:	80 e0       	ldi	r24, 0x00	; 0
- 31e:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 322:	8c 2f       	mov	r24, r28
- 324:	0e 94 ca 01 	call	0x394	; 0x394 <LCD_enuLatch>
- 328:	10 c0       	rjmp	.+32     	; 0x34a <LCD_enuGoToPosition+0x40>
- 32a:	82 30       	cpi	r24, 0x02	; 2
- 32c:	69 f4       	brne	.+26     	; 0x348 <LCD_enuGoToPosition+0x3e>
- 32e:	c0 ec       	ldi	r28, 0xC0	; 192
- 330:	c6 0f       	add	r28, r22
- 332:	40 e0       	ldi	r20, 0x00	; 0
- 334:	60 e0       	ldi	r22, 0x00	; 0
- 336:	80 e0       	ldi	r24, 0x00	; 0
- 338:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 33c:	8c 2f       	mov	r24, r28
- 33e:	0e 94 ca 01 	call	0x394	; 0x394 <LCD_enuLatch>
- 342:	03 c0       	rjmp	.+6      	; 0x34a <LCD_enuGoToPosition+0x40>
- 344:	81 e0       	ldi	r24, 0x01	; 1
- 346:	01 c0       	rjmp	.+2      	; 0x34a <LCD_enuGoToPosition+0x40>
- 348:	81 e0       	ldi	r24, 0x01	; 1
- 34a:	cf 91       	pop	r28
- 34c:	08 95       	ret
-
-0000034e <LCD_vidCheckPosition>:
- 34e:	80 91 70 00 	lds	r24, 0x0070	; 0x800070 <__data_end>
- 352:	80 31       	cpi	r24, 0x10	; 16
- 354:	51 f4       	brne	.+20     	; 0x36a <LCD_vidCheckPosition+0x1c>
- 356:	60 e0       	ldi	r22, 0x00	; 0
- 358:	82 e0       	ldi	r24, 0x02	; 2
- 35a:	0e 94 85 01 	call	0x30a	; 0x30a <LCD_enuGoToPosition>
- 35e:	80 91 70 00 	lds	r24, 0x0070	; 0x800070 <__data_end>
- 362:	8f 5f       	subi	r24, 0xFF	; 255
- 364:	80 93 70 00 	sts	0x0070, r24	; 0x800070 <__data_end>
- 368:	08 95       	ret
- 36a:	80 32       	cpi	r24, 0x20	; 32
- 36c:	79 f4       	brne	.+30     	; 0x38c <LCD_vidCheckPosition+0x3e>
- 36e:	40 e0       	ldi	r20, 0x00	; 0
- 370:	60 e0       	ldi	r22, 0x00	; 0
- 372:	80 e0       	ldi	r24, 0x00	; 0
- 374:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 378:	81 e0       	ldi	r24, 0x01	; 1
- 37a:	0e 94 ca 01 	call	0x394	; 0x394 <LCD_enuLatch>
- 37e:	60 e0       	ldi	r22, 0x00	; 0
- 380:	81 e0       	ldi	r24, 0x01	; 1
- 382:	0e 94 85 01 	call	0x30a	; 0x30a <LCD_enuGoToPosition>
- 386:	10 92 70 00 	sts	0x0070, r1	; 0x800070 <__data_end>
- 38a:	08 95       	ret
- 38c:	8f 5f       	subi	r24, 0xFF	; 255
- 38e:	80 93 70 00 	sts	0x0070, r24	; 0x800070 <__data_end>
- 392:	08 95       	ret
-
-00000394 <LCD_enuLatch>:
- 394:	1f 93       	push	r17
- 396:	cf 93       	push	r28
- 398:	df 93       	push	r29
- 39a:	1f 92       	push	r1
- 39c:	cd b7       	in	r28, 0x3d	; 61
- 39e:	de b7       	in	r29, 0x3e	; 62
- 3a0:	18 2f       	mov	r17, r24
- 3a2:	19 82       	std	Y+1, r1	; 0x01
- 3a4:	40 e0       	ldi	r20, 0x00	; 0
- 3a6:	61 e0       	ldi	r22, 0x01	; 1
- 3a8:	80 e0       	ldi	r24, 0x00	; 0
- 3aa:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 3ae:	40 e0       	ldi	r20, 0x00	; 0
- 3b0:	62 e0       	ldi	r22, 0x02	; 2
- 3b2:	80 e0       	ldi	r24, 0x00	; 0
- 3b4:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 3b8:	ae 01       	movw	r20, r28
- 3ba:	4f 5f       	subi	r20, 0xFF	; 255
- 3bc:	5f 4f       	sbci	r21, 0xFF	; 255
- 3be:	60 e0       	ldi	r22, 0x00	; 0
- 3c0:	80 e0       	ldi	r24, 0x00	; 0
- 3c2:	0e 94 2d 01 	call	0x25a	; 0x25a <DIO_enuGetPinVal>
- 3c6:	89 81       	ldd	r24, Y+1	; 0x01
- 3c8:	81 30       	cpi	r24, 0x01	; 1
- 3ca:	11 f4       	brne	.+4      	; 0x3d0 <LCD_enuLatch+0x3c>
- 3cc:	0e 94 a7 01 	call	0x34e	; 0x34e <LCD_vidCheckPosition>
- 3d0:	41 2f       	mov	r20, r17
- 3d2:	44 1f       	adc	r20, r20
- 3d4:	44 27       	eor	r20, r20
- 3d6:	44 1f       	adc	r20, r20
- 3d8:	67 e0       	ldi	r22, 0x07	; 7
- 3da:	81 e0       	ldi	r24, 0x01	; 1
- 3dc:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 3e0:	16 fb       	bst	r17, 6
- 3e2:	44 27       	eor	r20, r20
- 3e4:	40 f9       	bld	r20, 0
- 3e6:	66 e0       	ldi	r22, 0x06	; 6
- 3e8:	81 e0       	ldi	r24, 0x01	; 1
- 3ea:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 3ee:	15 fb       	bst	r17, 5
- 3f0:	44 27       	eor	r20, r20
- 3f2:	40 f9       	bld	r20, 0
- 3f4:	65 e0       	ldi	r22, 0x05	; 5
- 3f6:	81 e0       	ldi	r24, 0x01	; 1
- 3f8:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 3fc:	14 fb       	bst	r17, 4
- 3fe:	44 27       	eor	r20, r20
- 400:	40 f9       	bld	r20, 0
- 402:	64 e0       	ldi	r22, 0x04	; 4
- 404:	81 e0       	ldi	r24, 0x01	; 1
- 406:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 40a:	13 fb       	bst	r17, 3
- 40c:	44 27       	eor	r20, r20
- 40e:	40 f9       	bld	r20, 0
- 410:	63 e0       	ldi	r22, 0x03	; 3
- 412:	81 e0       	ldi	r24, 0x01	; 1
- 414:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 418:	12 fb       	bst	r17, 2
- 41a:	44 27       	eor	r20, r20
- 41c:	40 f9       	bld	r20, 0
- 41e:	62 e0       	ldi	r22, 0x02	; 2
- 420:	81 e0       	ldi	r24, 0x01	; 1
- 422:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 426:	11 fb       	bst	r17, 1
- 428:	44 27       	eor	r20, r20
- 42a:	40 f9       	bld	r20, 0
- 42c:	61 e0       	ldi	r22, 0x01	; 1
- 42e:	81 e0       	ldi	r24, 0x01	; 1
- 430:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 434:	41 2f       	mov	r20, r17
- 436:	41 70       	andi	r20, 0x01	; 1
- 438:	60 e0       	ldi	r22, 0x00	; 0
- 43a:	81 e0       	ldi	r24, 0x01	; 1
- 43c:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 440:	18 2f       	mov	r17, r24
- 442:	0e 94 74 01 	call	0x2e8	; 0x2e8 <LCD_vidTrigger_LATCH>
- 446:	81 2f       	mov	r24, r17
- 448:	0f 90       	pop	r0
- 44a:	df 91       	pop	r29
- 44c:	cf 91       	pop	r28
- 44e:	1f 91       	pop	r17
- 450:	08 95       	ret
-
-00000452 <LCD_enuInit>:
- 452:	41 e0       	ldi	r20, 0x01	; 1
- 454:	60 e0       	ldi	r22, 0x00	; 0
- 456:	80 e0       	ldi	r24, 0x00	; 0
- 458:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
- 45c:	41 e0       	ldi	r20, 0x01	; 1
- 45e:	61 e0       	ldi	r22, 0x01	; 1
- 460:	80 e0       	ldi	r24, 0x00	; 0
- 462:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
- 466:	41 e0       	ldi	r20, 0x01	; 1
- 468:	62 e0       	ldi	r22, 0x02	; 2
- 46a:	80 e0       	ldi	r24, 0x00	; 0
- 46c:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
- 470:	41 e0       	ldi	r20, 0x01	; 1
- 472:	67 e0       	ldi	r22, 0x07	; 7
- 474:	81 e0       	ldi	r24, 0x01	; 1
- 476:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
- 47a:	41 e0       	ldi	r20, 0x01	; 1
- 47c:	66 e0       	ldi	r22, 0x06	; 6
- 47e:	81 e0       	ldi	r24, 0x01	; 1
- 480:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
- 484:	41 e0       	ldi	r20, 0x01	; 1
- 486:	65 e0       	ldi	r22, 0x05	; 5
- 488:	81 e0       	ldi	r24, 0x01	; 1
- 48a:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
- 48e:	41 e0       	ldi	r20, 0x01	; 1
- 490:	64 e0       	ldi	r22, 0x04	; 4
- 492:	81 e0       	ldi	r24, 0x01	; 1
- 494:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
- 498:	8d e2       	ldi	r24, 0x2D	; 45
- 49a:	92 e2       	ldi	r25, 0x22	; 34
- 49c:	01 97       	sbiw	r24, 0x01	; 1
- 49e:	f1 f7       	brne	.-4      	; 0x49c <LCD_enuInit+0x4a>
- 4a0:	00 c0       	rjmp	.+0      	; 0x4a2 <LCD_enuInit+0x50>
- 4a2:	00 00       	nop
- 4a4:	41 e0       	ldi	r20, 0x01	; 1
- 4a6:	63 e0       	ldi	r22, 0x03	; 3
- 4a8:	81 e0       	ldi	r24, 0x01	; 1
- 4aa:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
- 4ae:	41 e0       	ldi	r20, 0x01	; 1
- 4b0:	62 e0       	ldi	r22, 0x02	; 2
- 4b2:	81 e0       	ldi	r24, 0x01	; 1
- 4b4:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
- 4b8:	41 e0       	ldi	r20, 0x01	; 1
- 4ba:	61 e0       	ldi	r22, 0x01	; 1
- 4bc:	81 e0       	ldi	r24, 0x01	; 1
- 4be:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
- 4c2:	41 e0       	ldi	r20, 0x01	; 1
- 4c4:	60 e0       	ldi	r22, 0x00	; 0
- 4c6:	81 e0       	ldi	r24, 0x01	; 1
- 4c8:	0e 94 49 00 	call	0x92	; 0x92 <DIO_enuSetPinDirection>
- 4cc:	40 e0       	ldi	r20, 0x00	; 0
- 4ce:	60 e0       	ldi	r22, 0x00	; 0
- 4d0:	80 e0       	ldi	r24, 0x00	; 0
- 4d2:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 4d6:	88 e3       	ldi	r24, 0x38	; 56
- 4d8:	0e 94 ca 01 	call	0x394	; 0x394 <LCD_enuLatch>
- 4dc:	e9 ef       	ldi	r30, 0xF9	; 249
- 4de:	f0 e0       	ldi	r31, 0x00	; 0
- 4e0:	31 97       	sbiw	r30, 0x01	; 1
- 4e2:	f1 f7       	brne	.-4      	; 0x4e0 <LCD_enuInit+0x8e>
- 4e4:	00 c0       	rjmp	.+0      	; 0x4e6 <LCD_enuInit+0x94>
- 4e6:	00 00       	nop
- 4e8:	40 e0       	ldi	r20, 0x00	; 0
- 4ea:	60 e0       	ldi	r22, 0x00	; 0
- 4ec:	80 e0       	ldi	r24, 0x00	; 0
- 4ee:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 4f2:	8f e0       	ldi	r24, 0x0F	; 15
- 4f4:	0e 94 ca 01 	call	0x394	; 0x394 <LCD_enuLatch>
- 4f8:	89 ef       	ldi	r24, 0xF9	; 249
- 4fa:	90 e0       	ldi	r25, 0x00	; 0
- 4fc:	01 97       	sbiw	r24, 0x01	; 1
- 4fe:	f1 f7       	brne	.-4      	; 0x4fc <LCD_enuInit+0xaa>
- 500:	00 c0       	rjmp	.+0      	; 0x502 <LCD_enuInit+0xb0>
- 502:	00 00       	nop
+	ES_t Local_enuErrorState = ES_NOK;
+		
+	/* RS --> LOW to write Command */
+	Local_enuErrorState = DIO_enuSetPinVal(RS_PORT, RS_PIN, DIO_u8LOW);
  504:	40 e0       	ldi	r20, 0x00	; 0
  506:	60 e0       	ldi	r22, 0x00	; 0
  508:	80 e0       	ldi	r24, 0x00	; 0
  50a:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 50e:	81 e0       	ldi	r24, 0x01	; 1
- 510:	0e 94 ca 01 	call	0x394	; 0x394 <LCD_enuLatch>
- 514:	e3 ef       	ldi	r30, 0xF3	; 243
- 516:	f1 e0       	ldi	r31, 0x01	; 1
- 518:	31 97       	sbiw	r30, 0x01	; 1
- 51a:	f1 f7       	brne	.-4      	; 0x518 <LCD_enuInit+0xc6>
- 51c:	00 c0       	rjmp	.+0      	; 0x51e <LCD_enuInit+0xcc>
- 51e:	00 00       	nop
- 520:	40 e0       	ldi	r20, 0x00	; 0
- 522:	60 e0       	ldi	r22, 0x00	; 0
- 524:	80 e0       	ldi	r24, 0x00	; 0
- 526:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 52a:	86 e0       	ldi	r24, 0x06	; 6
- 52c:	0e 94 ca 01 	call	0x394	; 0x394 <LCD_enuLatch>
- 530:	e9 ef       	ldi	r30, 0xF9	; 249
- 532:	f0 e0       	ldi	r31, 0x00	; 0
- 534:	31 97       	sbiw	r30, 0x01	; 1
- 536:	f1 f7       	brne	.-4      	; 0x534 <LCD_enuInit+0xe2>
- 538:	00 c0       	rjmp	.+0      	; 0x53a <LCD_enuInit+0xe8>
- 53a:	00 00       	nop
- 53c:	08 95       	ret
+	if(Local_enuErrorState != ES_OK)
+ 50e:	81 11       	cpse	r24, r1
+ 510:	03 c0       	rjmp	.+6      	; 0x518 <LCD_vidClearScreen+0x14>
+		return Local_enuErrorState;	
 
-0000053e <LCD_enuDisplayChar>:
- 53e:	cf 93       	push	r28
- 540:	c8 2f       	mov	r28, r24
- 542:	41 e0       	ldi	r20, 0x01	; 1
- 544:	60 e0       	ldi	r22, 0x00	; 0
- 546:	80 e0       	ldi	r24, 0x00	; 0
- 548:	0e 94 bb 00 	call	0x176	; 0x176 <DIO_enuSetPinVal>
- 54c:	8c 2f       	mov	r24, r28
- 54e:	0e 94 ca 01 	call	0x394	; 0x394 <LCD_enuLatch>
- 552:	cf 91       	pop	r28
- 554:	08 95       	ret
+	/* Call Latch Function */
+	Local_enuErrorState = LCD_enuLatch(Copy_u8Command);
+ 512:	81 e0       	ldi	r24, 0x01	; 1
+ 514:	0e 94 3e 01 	call	0x27c	; 0x27c <LCD_enuLatch>
+ ******************************************************************************
+**/
+void LCD_vidClearScreen(void)
+{
+	LCD_inlenuSendCommand(LCD_Clear_Display);
+	LCD_u8PosCounter = 0;
+ 518:	10 92 7c 00 	sts	0x007C, r1	; 0x80007c <__data_end>
+ 51c:	08 95       	ret
 
-00000556 <LCD_enuWriteString>:
-}
-
+0000051e <LCD_enuWriteString>:
+ * @retval		: ES_t --> it returns the state of excution of this function
+ * @note		: none
+ ******************************************************************************
+**/
 ES_t LCD_enuWriteString(u8 *Copy_pu8Str)
 {
- 556:	cf 93       	push	r28
- 558:	df 93       	push	r29
- 55a:	ec 01       	movw	r28, r24
+ 51e:	cf 93       	push	r28
+ 520:	df 93       	push	r29
+ 522:	ec 01       	movw	r28, r24
 	ES_t Local_enuErrorState = ES_NOK;
 	
 	if(Copy_pu8Str != NULL)
- 55c:	89 2b       	or	r24, r25
- 55e:	29 f4       	brne	.+10     	; 0x56a <LCD_enuWriteString+0x14>
+ 524:	89 2b       	or	r24, r25
+ 526:	39 f4       	brne	.+14     	; 0x536 <LCD_enuWriteString+0x18>
 		}
 		Local_enuErrorState = ES_OK;
 	}
 	else
 	{
-		Local_enuErrorState = ES_NULL_POINTER;
- 560:	82 e0       	ldi	r24, 0x02	; 2
- 562:	06 c0       	rjmp	.+12     	; 0x570 <LCD_enuWriteString+0x1a>
+		return ES_NULL_POINTER;
+ 528:	82 e0       	ldi	r24, 0x02	; 2
+ 52a:	08 c0       	rjmp	.+16     	; 0x53c <LCD_enuWriteString+0x1e>
 	
 	if(Copy_pu8Str != NULL)
 	{
 		while(*Copy_pu8Str != '\0')
 		{
 			Local_enuErrorState = LCD_enuDisplayChar(*Copy_pu8Str);
- 564:	0e 94 9f 02 	call	0x53e	; 0x53e <LCD_enuDisplayChar>
+ 52c:	0e 94 72 02 	call	0x4e4	; 0x4e4 <LCD_enuDisplayChar>
+			if(Local_enuErrorState != ES_OK)
+ 530:	81 11       	cpse	r24, r1
+ 532:	04 c0       	rjmp	.+8      	; 0x53c <LCD_enuWriteString+0x1e>
+				return Local_enuErrorState;
 			Copy_pu8Str++;
- 568:	21 96       	adiw	r28, 0x01	; 1
+ 534:	21 96       	adiw	r28, 0x01	; 1
 {
 	ES_t Local_enuErrorState = ES_NOK;
 	
 	if(Copy_pu8Str != NULL)
 	{
 		while(*Copy_pu8Str != '\0')
- 56a:	88 81       	ld	r24, Y
- 56c:	81 11       	cpse	r24, r1
- 56e:	fa cf       	rjmp	.-12     	; 0x564 <LCD_enuWriteString+0xe>
-	{
-		Local_enuErrorState = ES_NULL_POINTER;
+ 536:	88 81       	ld	r24, Y
+ 538:	81 11       	cpse	r24, r1
+ 53a:	f8 cf       	rjmp	.-16     	; 0x52c <LCD_enuWriteString+0xe>
+		return ES_NULL_POINTER;
 	}
 	
+	Local_enuErrorState = ES_OK;
 	return Local_enuErrorState;
- 570:	df 91       	pop	r29
- 572:	cf 91       	pop	r28
- 574:	08 95       	ret
+}
+ 53c:	df 91       	pop	r29
+ 53e:	cf 91       	pop	r28
+ 540:	08 95       	ret
 
-00000576 <main>:
-#include <util/delay.h>
+00000542 <main>:
 
 
 int main(void)
 {
-	LCD_enuInit();
- 576:	0e 94 29 02 	call	0x452	; 0x452 <LCD_enuInit>
-	//LCD_enuDisplayChar('K');
+	ES_t error = ES_NOK;
+	error = LCD_enuInit();
+ 542:	0e 94 a8 01 	call	0x350	; 0x350 <LCD_enuInit>
 	
-	//LCD_enuWriteString("Hello ");
-	//_delay_ms(500);
-	//LCD_vidClearScreen();
-	LCD_enuWriteString("Mostafa Edrees");
- 57a:	80 e6       	ldi	r24, 0x60	; 96
- 57c:	90 e0       	ldi	r25, 0x00	; 0
- 57e:	0e 94 ab 02 	call	0x556	; 0x556 <LCD_enuWriteString>
-	LCD_enuDisplayChar('T');
- 582:	84 e5       	ldi	r24, 0x54	; 84
- 584:	0e 94 9f 02 	call	0x53e	; 0x53e <LCD_enuDisplayChar>
-	LCD_enuDisplayChar('T');
- 588:	84 e5       	ldi	r24, 0x54	; 84
- 58a:	0e 94 9f 02 	call	0x53e	; 0x53e <LCD_enuDisplayChar>
-	LCD_enuDisplayChar('T');
- 58e:	84 e5       	ldi	r24, 0x54	; 84
- 590:	0e 94 9f 02 	call	0x53e	; 0x53e <LCD_enuDisplayChar>
- 594:	ff cf       	rjmp	.-2      	; 0x594 <main+0x1e>
+	if(error == ES_OK)
+ 546:	81 11       	cpse	r24, r1
+ 548:	1e c0       	rjmp	.+60     	; 0x586 <main+0x44>
+	{
+		LCD_enuWriteString("Mostafa Edrees");
+ 54a:	80 e6       	ldi	r24, 0x60	; 96
+ 54c:	90 e0       	ldi	r25, 0x00	; 0
+ 54e:	0e 94 8f 02 	call	0x51e	; 0x51e <LCD_enuWriteString>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
 
-00000596 <_exit>:
- 596:	f8 94       	cli
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 552:	2f eb       	ldi	r18, 0xBF	; 191
+ 554:	87 e2       	ldi	r24, 0x27	; 39
+ 556:	99 e0       	ldi	r25, 0x09	; 9
+ 558:	21 50       	subi	r18, 0x01	; 1
+ 55a:	80 40       	sbci	r24, 0x00	; 0
+ 55c:	90 40       	sbci	r25, 0x00	; 0
+ 55e:	e1 f7       	brne	.-8      	; 0x558 <main+0x16>
+ 560:	00 c0       	rjmp	.+0      	; 0x562 <main+0x20>
+ 562:	00 00       	nop
+		_delay_ms(3000);
+		LCD_vidClearScreen();
+ 564:	0e 94 82 02 	call	0x504	; 0x504 <LCD_vidClearScreen>
+		LCD_enuWriteString("CAT Reloaded");
+ 568:	8f e6       	ldi	r24, 0x6F	; 111
+ 56a:	90 e0       	ldi	r25, 0x00	; 0
+ 56c:	0e 94 8f 02 	call	0x51e	; 0x51e <LCD_enuWriteString>
+ 570:	2f eb       	ldi	r18, 0xBF	; 191
+ 572:	87 e2       	ldi	r24, 0x27	; 39
+ 574:	99 e0       	ldi	r25, 0x09	; 9
+ 576:	21 50       	subi	r18, 0x01	; 1
+ 578:	80 40       	sbci	r24, 0x00	; 0
+ 57a:	90 40       	sbci	r25, 0x00	; 0
+ 57c:	e1 f7       	brne	.-8      	; 0x576 <main+0x34>
+ 57e:	00 c0       	rjmp	.+0      	; 0x580 <main+0x3e>
+ 580:	00 00       	nop
+		_delay_ms(3000);
+		LCD_vidClearScreen();
+ 582:	0e 94 82 02 	call	0x504	; 0x504 <LCD_vidClearScreen>
+ 586:	ff cf       	rjmp	.-2      	; 0x586 <main+0x44>
 
-00000598 <__stop_program>:
- 598:	ff cf       	rjmp	.-2      	; 0x598 <__stop_program>
+00000588 <_exit>:
+ 588:	f8 94       	cli
+
+0000058a <__stop_program>:
+ 58a:	ff cf       	rjmp	.-2      	; 0x58a <__stop_program>

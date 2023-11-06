@@ -23,37 +23,18 @@
 
 int main(void)
 {
-	LCD_enuInit();
+	ES_t error = ES_NOK;
+	error = LCD_enuInit();
 	
-	//LCD_enuDisplayChar('M');
-	//LCD_enuDisplayChar('o');
-	//LCD_enuDisplayChar('s');
-	//LCD_enuDisplayChar('t');
-	//LCD_enuDisplayChar('a');
-	//LCD_enuDisplayChar('f');
-	//LCD_enuDisplayChar('a');
-	//LCD_enuDisplayChar('M');
-	//LCD_enuDisplayChar('o');
-	//LCD_enuDisplayChar('s');
-	//LCD_enuDisplayChar('t');
-	//LCD_enuDisplayChar('a');
-	//LCD_enuDisplayChar('f');
-	//LCD_enuDisplayChar('a');
-	//LCD_enuDisplayChar('K');
-	//LCD_enuDisplayChar('K');
-	
-	//LCD_enuWriteString("Hello ");
-	//_delay_ms(500);
-	//LCD_vidClearScreen();
-	LCD_enuWriteString("Mostafa Edrees");
-	LCD_enuDisplayChar('T');
-	LCD_enuDisplayChar('T');
-	LCD_enuDisplayChar('T');
-	//_delay_ms(500);
-	//LCD_enuDisplayChar('T');
-	//_delay_ms(500);
-	//LCD_enuDisplayChar('T');
-	//_delay_ms(500);
+	if(error == ES_OK)
+	{
+		LCD_enuWriteString("Mostafa Edrees");
+		_delay_ms(3000);
+		LCD_vidClearScreen();
+		LCD_enuWriteString("CAT Reloaded");
+		_delay_ms(3000);
+		LCD_vidClearScreen();
+	}
 	
     /* Replace with your application code */
     while (1) 
