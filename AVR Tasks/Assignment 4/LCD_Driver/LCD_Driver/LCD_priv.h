@@ -11,6 +11,9 @@
 #ifndef LCD_PRIV_H_
 #define LCD_PRIV_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #define EIGHT_BIT			8
 #define FOUR_BIT			4
 

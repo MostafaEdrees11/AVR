@@ -333,19 +333,23 @@ ES_t LCD_enuGoToPosition(u8 Copy_u8Line, u8 Copy_u8Position)
 {
 	ES_t Local_enuErrorState = ES_NOK;
 	
-	if(Copy_u8Position >= 0 && Copy_u8Position < 32)
+	if(Copy_u8Position >= 0 && Copy_u8Position < 16)
 	{
 		if(Copy_u8Line == LCD_FIRST_LINE)
 		{
 			Local_enuErrorState = LCD_inlenuSendCommand(LCD_BEGIN_AT_FIRST_ROW + Copy_u8Position);
 			if(Local_enuErrorState != ES_OK)
 				return Local_enuErrorState;
+				
+			LCD_u8PosCounter = Copy_u8Position;
 		}
 		else if(Copy_u8Line == LCD_SECOND_LINE)
 		{
 			Local_enuErrorState = LCD_inlenuSendCommand(LCD_BEGIN_AT_SECOND_ROW + Copy_u8Position);
 			if(Local_enuErrorState != ES_OK)
 				return Local_enuErrorState;
+				
+			LCD_u8PosCounter = Copy_u8Position + 16;
 		}
 	}
 	
@@ -436,22 +440,18 @@ ES_t LCD_enuWriteString(u8 *Copy_pu8Str)
  * @note		: none
  ******************************************************************************
 **/
-//ES_t LCD_enuWriteNumber(s32 Copy_s32Number)
-//{
-//	s8 Local_As8Container[16];
-//	
-//	itoa(Copy_s32Number, Local_As8Container, 10);
-//	LCD_enuWriteString(Local_As8Container);
-//	
-//	//if(Copy_s32Number > 0)
-//	//{
-//	//	itoa(Copy_s32Number,Local_As8Container,10);
-//	//	LCD_enuWriteString(Local_As8Container);
-//	//}
-//	//else
-//	//{
-//	//	LCD_enuDisplayChar('-');
-//	//	itoa(Copy_s32Number,Local_As8Container,10);
-//	//	LCD_enuWriteString(Local_As8Container);
-//	//}
-//}
+ES_t LCD_enuWriteNumber(int Copy_s32Number)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+	u8 Local_As8Container[16];
+	u8 Local_u8Iterator;
+	
+	sprintf(Local_As8Container, "%d", Copy_s32Number);
+	
+	for(Local_u8Iterator = 0; Local_As8Container[Local_u8Iterator] != '\0'; Local_u8Iterator++)
+	{
+		Local_enuErrorState = LCD_enuDisplayChar(Local_As8Container[Local_u8Iterator]);
+	}
+	
+	return Local_enuErrorState;
+}
