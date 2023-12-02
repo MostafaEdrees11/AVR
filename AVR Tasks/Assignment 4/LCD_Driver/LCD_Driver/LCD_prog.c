@@ -88,6 +88,9 @@ ES_t LCD_enuInit(void)
 	
 	#elif LCD_MODE == FOUR_BIT
 	/* Function Set */
+	LCD_inlenuSendCommand(0x33);
+	LCD_inlenuSendCommand(0x32);
+	
 	Local_enuErrorState = LCD_inlenuSendCommand(LCD_4Bit_TwoLine_5_7CharFont);
 	if(Local_enuErrorState != ES_OK)
 		return Local_enuErrorState;
@@ -194,8 +197,8 @@ static ES_t LCD_enuLatch(u8 Copy_u8Data)
 	if(Local_enuErrorState != ES_OK)
 		return Local_enuErrorState;
 	
-	/* Enable --> LOW */
-	Local_enuErrorState = DIO_enuSetPinVal(EN_PORT, EN_PIN, DIO_u8LOW);
+	/* Enable --> HIGH */
+	Local_enuErrorState = DIO_enuSetPinVal(EN_PORT, EN_PIN, DIO_u8HIGH);
 	if(Local_enuErrorState != ES_OK)
 		return Local_enuErrorState;
 	
@@ -278,7 +281,9 @@ static ES_t LCD_enuLatch(u8 Copy_u8Data)
 	#error "LCD Mode has a wrong configuration"
 	#endif
 	
-	LCD_vidTrigger_LATCH();
+	_delay_ms(1);
+	DIO_enuSetPinVal(EN_PORT, EN_PIN, DIO_u8LOW);
+	_delay_ms(1);
 	
 	Local_enuErrorState = ES_OK;
 	return Local_enuErrorState;
@@ -287,9 +292,9 @@ static ES_t LCD_enuLatch(u8 Copy_u8Data)
 static void LCD_vidTrigger_LATCH(void)
 {
 	/* Enable EN --> it works at Rising Edge */
-	DIO_enuSetPinVal(EN_PORT, EN_PIN, DIO_u8HIGH);
-	_delay_ms(10);
 	DIO_enuSetPinVal(EN_PORT, EN_PIN, DIO_u8LOW);
+	_delay_ms(10);
+	DIO_enuSetPinVal(EN_PORT, EN_PIN, DIO_u8HIGH);
 }
 
 /**

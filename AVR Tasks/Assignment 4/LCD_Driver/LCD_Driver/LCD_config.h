@@ -13,7 +13,7 @@
 
 /* LCD Mode 
  * it must be --> EIGHT_BIT or FOUR_BIT */
-#define LCD_MODE					EIGHT_BIT
+#define LCD_MODE					FOUR_BIT
 
 
 /* Control Pins */
