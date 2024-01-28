@@ -148,6 +148,18 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="HAL\Seven_Segment\Seven_Segment_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Seven_Segment\Seven_Segment_int.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Seven_Segment\Seven_Segment_priv.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Seven_Segment\Seven_Segment_prog.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="LIB\Error_States.h">
       <SubType>compile</SubType>
     </Compile>
@@ -190,13 +202,18 @@
     <Compile Include="MCAL\GIE\GIE_prog.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="MCAL\interrupt.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="HAL\Seven_Segment" />
     <Folder Include="MCAL" />
     <Folder Include="MCAL\DIO" />
     <Folder Include="LIB" />
     <Folder Include="MCAL\EXTI" />
     <Folder Include="MCAL\GIE" />
+    <Folder Include="HAL" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MCAL\GIE\GIE_int.h">

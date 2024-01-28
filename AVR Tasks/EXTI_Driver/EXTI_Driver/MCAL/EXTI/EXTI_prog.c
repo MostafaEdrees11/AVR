@@ -13,8 +13,13 @@
 #include "EXTI_priv.h"
 #include "EXTI_config.h"
 
-/* array of pointers to the function that will be excuted when the interrupt is happen */
-static volatile void (*EXTI_APFunc[MAX_NUM_EXTI])(void) = {NULL, NULL, NULL};
+#include "../interrupt.h"
+
+/* array of pointers to the function that will be executed when the interrupt is happen */
+static volatile void (*EXTI_APFunc[MAX_NUM_EXTI])(void *) = {NULL, NULL, NULL};
+	
+/* array of pointers to the parameters of the function that will be executed when the interrupt is happen */
+static volatile void (*EXTI_APvidGenericParameters[MAX_NUM_EXTI])(void) = {NULL, NULL, NULL};
 	
 
 ES_t EXTI_enuInit(EXTI_Configuration_t *Copy_PEXTI_Config)
@@ -295,15 +300,16 @@ ES_t EXTI_enuDisable(EXTI_ID_t Copy_enuEXTI_Id)
 	return Local_enuErrorState;
 }
 
-ES_t EXTI_enuCallBackFunc(void (*Copy_PFunc)(void),EXTI_ID_t Copy_enuEXTI_Id)
+ES_t EXTI_enuCallBackFunc(volatile void (*Copy_PFuncISRFunc)(void*), volatile void *Copy_PvidISRParameter, EXTI_ID_t Copy_enuEXTI_Id)
 {
 	ES_t Local_enuErrorState = ES_NOK;
 	
-	if(Copy_PFunc != NULL)
+	if(Copy_PFuncISRFunc != NULL)
 	{
 		if(Copy_enuEXTI_Id < MAX_NUM_EXTI)
 		{
-			EXTI_APFunc[Copy_enuEXTI_Id] = Copy_PFunc;
+			EXTI_APFunc[Copy_enuEXTI_Id] = Copy_PFuncISRFunc;
+			EXTI_APvidGenericParameters[Copy_enuEXTI_Id] = Copy_PvidISRParameter;
 			Local_enuErrorState = ES_OK;
 		}
 		else
@@ -315,34 +321,33 @@ ES_t EXTI_enuCallBackFunc(void (*Copy_PFunc)(void),EXTI_ID_t Copy_enuEXTI_Id)
 	{
 		Local_enuErrorState = ES_NULL_POINTER;
 	}
+	
+	return Local_enuErrorState;
 }
 
 /* ISR for EXTI0 */
-void __vector_1(void) __attribute__((signal));
-void __vector_1(void)
+ISR(VECT_INT0)
 {	
 	if(EXTI_APFunc[EXTI0] != NULL)
 	{
-		EXTI_APFunc[0]();
+		EXTI_APFunc[EXTI0](EXTI_APvidGenericParameters[EXTI0]);
 	}
 }
 
 /* ISR for EXTI1 */
-void __vector_2(void) __attribute__((signal));
-void __vector_2(void)
+ISR(VECT_INT1)
 {
 	if(EXTI_APFunc[EXTI1] != NULL)
 	{
-		EXTI_APFunc[1]();
+		EXTI_APFunc[EXTI1](EXTI_APvidGenericParameters[EXTI1]);
 	}
 }
 
 /* ISR for EXTI2 */
-void __vector_3(void) __attribute__((signal));
-void __vector_3(void)
-{	
-	if(EXTI_APFunc[EXTI1] != NULL)
+ISR(VECT_INT2)
+{
+	if(EXTI_APFunc[EXTI2] != NULL)
 	{
-		EXTI_APFunc[2]();
+		EXTI_APFunc[EXTI2](EXTI_APvidGenericParameters[EXTI2]);
 	}
 }
