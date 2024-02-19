@@ -34,22 +34,22 @@ ES_t ADC_enuDisableTrigger(void);
 ES_t ADC_enuCallBack(volatile void (*Copy_PFunc)(void*), volatile void *Copy_PvidAppParameter);
 
 /* Voltage Reference Selection */
-#define AREF_REF					0
-#define AVCC_REF					1
-#define INTERNAL_REF				2
+#define AREF_REF					REFERENCE_VOLTAGE
+#define AVCC_REF					5000UL
+#define INTERNAL_REF				2560UL
 
 /* Left or Right Adjustment */
 #define RIGHT_ADJUST				0
 #define LEFT_ADJUST					1
 
 /* ADC PreScaler Select */
-#define DIVISION_FACTOR_2			1
-#define DIVISION_FACTOR_4			2
-#define DIVISION_FACTOR_8			3
-#define DIVISION_FACTOR_16			4
-#define DIVISION_FACTOR_32			5
-#define DIVISION_FACTOR_64			6
-#define DIVISION_FACTOR_128			7
+#define DIVISION_FACTOR_2			2
+#define DIVISION_FACTOR_4			4
+#define DIVISION_FACTOR_8			8
+#define DIVISION_FACTOR_16			16
+#define DIVISION_FACTOR_32			32
+#define DIVISION_FACTOR_64			64
+#define DIVISION_FACTOR_128			128
 
 /* Analog Channels */
 #define ADC_CHANNEL_0				0

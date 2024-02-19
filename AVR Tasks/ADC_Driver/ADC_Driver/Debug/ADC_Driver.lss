@@ -641,7 +641,7 @@ int main(void)
      470:	8f 73       	andi	r24, 0x3F	; 63
      472:	87 b9       	out	0x07, r24	; 7
      474:	87 b1       	in	r24, 0x07	; 7
-     476:	80 64       	ori	r24, 0x40	; 64
+     476:	8f 7b       	andi	r24, 0xBF	; 191
      478:	87 b9       	out	0x07, r24	; 7
      47a:	87 b1       	in	r24, 0x07	; 7
      47c:	8f 77       	andi	r24, 0x7F	; 127
