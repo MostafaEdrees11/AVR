@@ -24,6 +24,8 @@ static volatile f32 LM35_f32Tempeture = 0;
 void LM35_inlvidReadADCValue(void *Copy_PvidLM35VoltValue)
 {
 	ADC_enuReadADCValue(Copy_PvidLM35VoltValue);
+	
+	LM35_f32Tempeture = ((LM35_u16ADCValue * ADC_VOLT_REF / ADC_RESOLUTION) / LM35_DEG_STEP);
 }
 
 ES_t Thermistor_LM35_enuInit(LM35_Configuration_t *Copy_PstrLM35Config)
@@ -64,7 +66,7 @@ ES_t Thermistor_LM35_enuGetTempVal(u8 Copy_u8Thermistor_LM35_ID, u16 *Copy_Pf32T
 	if(Copy_Pf32TempValue != NULL)
 	{
 		Local_enuErrorState = ADC_enuStartConversion();
-		*Copy_Pf32TempValue = ((LM35_u16ADCValue * ADC_VOLT_REF / ADC_RESOLUTION) / LM35_DEG_STEP);	
+		*Copy_Pf32TempValue = LM35_f32Tempeture;	
 	}
 	else
 	{

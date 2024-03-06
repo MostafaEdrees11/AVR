@@ -23,16 +23,31 @@ extern LM35_Configuration_t LM35_AstrLM35Config[LM35_NUM];
 int main(void)
 {
 	LCD_enuInit();
+	LCD_enuSendCommand(LCD_DisplayOn_CursorOff_NoBlinking);
 	
-	u16 x = 0;
+	u16 Local_u16CurrentTempVal = 0;
+	u16 Local_u16PreviousTempVal = 0;
+	
 	Thermistor_LM35_enuInit(LM35_AstrLM35Config);
+	
+	LCD_enuWriteString("Temperature: ");
 	
     /* Replace with your application code */
     while (1) 
     {
-		Thermistor_LM35_enuGetTempVal(0,&x);
-		LCD_enuWriteNumber(x);
-		_delay_ms(1000);
+		if(Local_u16PreviousTempVal == Local_u16CurrentTempVal)
+		{
+			Thermistor_LM35_enuGetTempVal(0,&Local_u16CurrentTempVal);
+		}
+		else
+		{
+			LCD_enuGoToPosition(0,13);
+			LCD_enuWriteString("   ");
+			LCD_enuGoToPosition(0,13);
+			LCD_enuWriteIntNumber(Local_u16CurrentTempVal);
+			_delay_ms(500);
+			Local_u16PreviousTempVal = Local_u16CurrentTempVal;
+		}
     }
 }
 

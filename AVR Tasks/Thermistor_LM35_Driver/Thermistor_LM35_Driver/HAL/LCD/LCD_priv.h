@@ -53,8 +53,8 @@ static void LCD_vidTrigger_LATCH(void);
 #define LCD_Increase_ShiftRight						0x05
 
 /* Lines */
-#define LCD_FIRST_LINE								1
-#define LCD_SECOND_LINE								2
+#define LCD_FIRST_LINE								0
+#define LCD_SECOND_LINE								1
 
 #define LCD_BEGIN_AT_FIRST_ROW						0x80
 #define LCD_BEGIN_AT_SECOND_ROW						0xC0

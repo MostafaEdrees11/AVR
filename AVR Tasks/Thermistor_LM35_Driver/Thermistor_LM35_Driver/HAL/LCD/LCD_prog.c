@@ -445,7 +445,7 @@ ES_t LCD_enuWriteString(u8 *Copy_pu8Str)
  * @note		: none
  ******************************************************************************
 **/
-ES_t LCD_enuWriteNumber(int Copy_s32Number)
+ES_t LCD_enuWriteIntNumber(s32 Copy_s32Number)
 {
 	ES_t Local_enuErrorState = ES_NOK;
 	u8 Local_As8Container[16];
@@ -457,6 +457,37 @@ ES_t LCD_enuWriteNumber(int Copy_s32Number)
 	{
 		Local_enuErrorState = LCD_enuDisplayChar(Local_As8Container[Local_u8Iterator]);
 	}
+	
+	return Local_enuErrorState;
+}
+
+ES_t LCD_enuWriteFloatNumber(f32 Copy_f32Number)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+	
+	f32 Local_f32FracNum = Copy_f32Number - (u32)Copy_f32Number;
+	s32 Local_s32IntNum = Copy_f32Number - Local_f32FracNum;
+	LCD_enuWriteIntNumber(Local_s32IntNum);
+	LCD_enuDisplayChar('.');
+	LCD_enuWriteIntNumber(Local_f32FracNum * 100000);
+	
+	return Local_enuErrorState;
+}
+
+ES_t LCD_enuCustomCharacter(u8 *Copy_ArrCustomChar)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+	
+	LCD_inlenuSendCommand(64);
+	
+	while(*Copy_ArrCustomChar != 0)
+	{
+		LCD_enuDisplayChar(*Copy_ArrCustomChar);
+		Copy_ArrCustomChar++;
+	}
+	
+	LCD_inlenuSendCommand(LCD_BEGIN_AT_FIRST_ROW);
+	LCD_enuDisplayChar(0);
 	
 	return Local_enuErrorState;
 }

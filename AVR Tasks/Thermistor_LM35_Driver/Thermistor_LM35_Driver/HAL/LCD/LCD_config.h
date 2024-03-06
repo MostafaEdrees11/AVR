@@ -64,4 +64,6 @@
 #define D0_PORT						DIO_u8PORTB
 #define D0_PIN						DIO_u8PIN0
 
+#define LCD_DisplayOn_CursorOff_NoBlinking			0x0C
+
 #endif /* LCD_CONFIG_H_ */
