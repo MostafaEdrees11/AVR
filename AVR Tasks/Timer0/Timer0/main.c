@@ -50,7 +50,9 @@ int main(void)
 	
 	/*GIE_enuGloable_Interrupt_Enable();*/
 	
-	/*TIMER0_enuGeneratePWM(70);*/
+	DIO_enuSetPinDirection(DIO_u8PORTB, DIO_u8PIN3,DIO_u8OUTPUT);
+	
+	TIMER0_enuGeneratePWM(80);
 	
 	
 	while(1)

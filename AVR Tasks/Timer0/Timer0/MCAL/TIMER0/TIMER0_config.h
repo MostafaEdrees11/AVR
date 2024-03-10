@@ -9,14 +9,14 @@
 #ifndef TIMER0_CONFIG_H_
 #define TIMER0_CONFIG_H_
 
-#define TIMER0_MODE			OVF
+#define TIMER0_MODE			FAST_PWM
 
 #define TIMER0_PRES			PRES_1024
 
 /* You should write F_SYSTEM in KHz */
 #define F_SYSTEM			1000UL
 
-#define OC0_MODE			DISCONNECTED
+#define OC0_MODE			NON_INVERTED
 
 
 #endif /* TIMER0_CONFIG_H_ */
